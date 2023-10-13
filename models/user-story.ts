@@ -1,6 +1,6 @@
 export interface IUserStory {
   id: string;
-  projectId: number;
+  projectId: string;
   title: string;
   description: string;
   step: number;
