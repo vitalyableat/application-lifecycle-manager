@@ -1,39 +1,20 @@
-import { ReactNode } from 'react';
+import { FC } from 'react';
 
-import { CopyDocumentBulkIcon, EditDocumentBulkIcon } from '@nextui-org/shared-icons';
+import { IconSvgProps } from '@nextui-org/shared-icons/dist/types';
 
-import { KanbanIcon, ReportIcon, TimelineIcon } from '@/icons';
-import { IProject } from '@/models/project';
+import { APP_ROUTES } from '@/constants/app-routes';
+import { LogoutIcon, ProfileIcon, ProjectsIcon, SettingsIcon, UsersIcon } from '@/icons';
 
 interface IProjectListboxItem {
-  key: string;
+  key: APP_ROUTES;
   title: string;
-  Icon: ReactNode;
+  Icon: FC<IconSvgProps>;
 }
 
-export const PROJECT_LISTBOX: IProjectListboxItem[] = [
-  { key: 'description', title: 'Description', Icon: <EditDocumentBulkIcon className="text-xl" /> },
-  { key: 'user-stories', title: 'User Stories', Icon: <CopyDocumentBulkIcon className="text-xl" /> },
-  { key: 'timeline', title: 'Timeline', Icon: <TimelineIcon /> },
-  { key: 'kanban-board', title: 'Kanban Board', Icon: <KanbanIcon /> },
-  { key: 'report', title: 'Report', Icon: <ReportIcon className="text-xl" /> },
-];
-
-export const MOCKED_PROJECTS: IProject[] = [
-  {
-    id: '1',
-    name: 'Project 1',
-    description: 'Description',
-    startDate: '2023.10.10',
-    endDate: '',
-    employeeIds: ['1', '2'],
-  },
-  {
-    id: '2',
-    name: 'Project 2',
-    description: 'Description',
-    startDate: '2023.10.10',
-    endDate: '',
-    employeeIds: ['1', '2'],
-  },
+export const NAVBAR_LISTBOX: IProjectListboxItem[] = [
+  { key: APP_ROUTES.PROJECTS, title: 'Projects', Icon: ProjectsIcon },
+  { key: APP_ROUTES.USERS, title: 'Users', Icon: UsersIcon },
+  { key: APP_ROUTES.PROFILE, title: 'Profile', Icon: ProfileIcon },
+  { key: APP_ROUTES.SETTINGS, title: 'Settings', Icon: SettingsIcon },
+  { key: APP_ROUTES.LOGIN, title: 'Logout', Icon: LogoutIcon },
 ];
