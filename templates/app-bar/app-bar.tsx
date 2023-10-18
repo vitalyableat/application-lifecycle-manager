@@ -1,44 +1,27 @@
-'use client';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  User,
-} from '@nextui-org/react';
+import { Divider } from '@nextui-org/divider';
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/navbar';
+import { User } from '@nextui-org/user';
 
 import { LogoIcon } from '@/icons';
 
 export const AppBar = () => {
   return (
     <Navbar maxWidth="full" className="shadow">
-      <NavbarBrand>
+      <NavbarBrand className="max-w-[159px]">
         <LogoIcon />
         <p className="font-bold text-xl">ALM</p>
       </NavbarBrand>
-
+      <NavbarContent as="div" justify="start">
+        <Divider orientation="vertical" className="h-10 bg-default-200" />
+      </NavbarContent>
       <NavbarContent as="div" justify="end">
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <User
-              name="Jane Doe"
-              as="button"
-              avatarProps={{
-                src: 'https://i.pravatar.cc/150?u=a04258114e29026702d',
-              }}
-            />
-          </DropdownTrigger>
-          <DropdownMenu variant="flat">
-            <DropdownItem key="profile">Profile</DropdownItem>
-            <DropdownItem key="settings">Settings</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <User
+          name="Jane Doe"
+          description="React Developer"
+          avatarProps={{
+            src: 'https://i.pravatar.cc/150?u=a04258114e29026702d',
+          }}
+        />
       </NavbarContent>
     </Navbar>
   );
