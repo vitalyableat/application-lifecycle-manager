@@ -1,8 +1,7 @@
 export interface ITask {
   id: string;
-  userStoryId: number;
-  employeeId: number;
-  sprintId: number;
+  userStoryId: string;
+  employeeId: string;
   title: string;
   description: string;
   status: 'To Do' | 'In Progress' | 'Testing' | 'Done';

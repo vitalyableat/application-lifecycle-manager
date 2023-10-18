@@ -1,5 +1,5 @@
-const Home = () => {
+const HomePage = () => {
   return <main>Application Lifecycle Manager</main>;
 };
 
-export default Home;
+export default HomePage;
