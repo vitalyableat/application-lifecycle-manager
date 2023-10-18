@@ -7,7 +7,6 @@ export interface IEmployee {
   email: string;
   username: string;
   startDate: string;
-  teamId: number;
   position: string;
   level: EmployeeLevel;
   active: boolean;

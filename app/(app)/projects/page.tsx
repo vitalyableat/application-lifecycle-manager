@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-const Projects: FC = () => {
+const ProjectsPage: FC = () => {
   return <>Select project to view its details :)</>;
 };
 
-export default Projects;
+export default ProjectsPage;

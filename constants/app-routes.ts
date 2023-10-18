@@ -10,11 +10,11 @@ export enum APP_ROUTES {
   USERS = '/users',
   USER_DETAILS = '/users/:userId',
   USER_DETAILS_EDIT = '/users/:userId/edit', // RM
-  USERS_CREATE = '/users/create', // RM
+  USER_CREATE = '/users/create', // RM
 
   PROJECTS = '/projects',
-  PROJECTS_CREATE = '/projects/create', // PM
-  PROJECTS_REQUESTS = '/projects/requests', // RM
+  PROJECT_CREATE = '/projects/create', // PM
+  PROJECT_REQUESTS = '/projects/requests', // RM
   PROJECT_DETAILS = '/projects/:projectId/details',
   PROJECT_DETAILS_EDIT = '/projects/:projectId/details/edit', // PM
   PROJECT_USER_STORIES = '/projects/:projectId/user-stories', // CRUD - PM
