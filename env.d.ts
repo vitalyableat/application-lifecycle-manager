@@ -1,5 +1,5 @@
 namespace NodeJS {
   interface ProcessEnv {
-    SERVER_URL: string;
+    MONGODB_URI: string;
   }
 }
