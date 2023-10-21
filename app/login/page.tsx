@@ -1,4 +1,4 @@
-import { LogoIcon } from '@/icons';
+import { LogoIcon } from '@/components/icons';
 
 import { LoginForm } from './components/login-form';
 

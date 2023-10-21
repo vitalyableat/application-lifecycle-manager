@@ -2,10 +2,10 @@
 import { FC } from 'react';
 
 import { Accordion, AccordionItem, Listbox, ListboxItem } from '@nextui-org/react';
+import { Search } from 'components/ui/search';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { Search } from '@/components/search';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTE } from '@/constants/app-route';
 
 import { MOCKED_PROJECTS, PROJECT_LISTBOX } from './project-tabs.constants';
 import { AccordionItemClasses } from './project-tabs.styles';
@@ -26,7 +26,7 @@ export const ProjectTabs: FC = () => {
         {MOCKED_PROJECTS.map(({ name, id }) => (
           <AccordionItem key={name} title={name}>
             <Listbox
-              onAction={(key) => router.push((key as APP_ROUTES).replace(':projectId', id))}
+              onAction={(key) => router.push((key as APP_ROUTE).replace(':projectId', id))}
               variant="flat"
               className="px-0 py-2"
               aria-label="Project Listbox">

@@ -1,4 +1,4 @@
-export enum APP_ROUTES {
+export enum APP_ROUTE {
   HOME = '/',
 
   LOGIN = '/login',

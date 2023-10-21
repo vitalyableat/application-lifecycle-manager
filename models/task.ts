@@ -1,4 +1,6 @@
-import { model, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
+
+import { TASK_STATUS } from '@/constants/task-status';
 
 export interface ITask {
   id: string;
@@ -12,13 +14,6 @@ export interface ITask {
   spentHours?: number;
 }
 
-export enum TASK_STATUS {
-  TO_DO = 'To Do',
-  IN_PROGRESS = 'In Progress',
-  TESTING = 'Testing',
-  DONE = 'Done',
-}
-
 const taskSchema = new Schema<ITask>({
   featureId: { type: SchemaTypes.ObjectId, required: true, ref: 'Feature' },
   employeeId: { type: SchemaTypes.ObjectId, ref: 'Employee' },
@@ -30,4 +25,12 @@ const taskSchema = new Schema<ITask>({
   spentHours: Number,
 });
 
-export const TaskModel = model<ITask>('Task', taskSchema);
+taskSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
+export const TaskModel = models?.Task || model<ITask>('Task', taskSchema);

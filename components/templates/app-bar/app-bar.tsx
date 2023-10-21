@@ -2,7 +2,7 @@ import { Divider } from '@nextui-org/divider';
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/navbar';
 import { User } from '@nextui-org/user';
 
-import { LogoIcon } from '@/icons';
+import { LogoIcon } from '@/components/icons';
 
 export const AppBar = () => {
   return (

@@ -1,9 +1,8 @@
 import { FC, PropsWithChildren } from 'react';
 
+import { AppProviders } from 'components/templates/app-providers';
 import type { Metadata } from 'next';
 import { Mulish } from 'next/font/google';
-
-import { AppProviders } from '@/templates/app-providers';
 
 import './globals.css';
 

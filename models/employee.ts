@@ -1,4 +1,7 @@
-import { model, Schema } from 'mongoose';
+import { model, models, Schema } from 'mongoose';
+
+import { EMPLOYEE_LEVEL } from '@/constants/employee-level';
+import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 
 export interface IEmployee {
   id: string;
@@ -9,20 +12,17 @@ export interface IEmployee {
   email: string;
   startDate: Date;
   position: string;
+  role: EMPLOYEE_ROLE;
   level: EMPLOYEE_LEVEL;
   active: boolean;
   avatar?: string;
 }
 
-export enum EMPLOYEE_LEVEL {
-  TRAINEE = 'Trainee',
-  JUNIOR = 'Junior',
-  MIDDLE = 'Middle',
-  SENIOR = 'Senior',
-  LEAD = 'Lead',
+export interface IEmployeeWithPassword extends IEmployee {
+  password: string;
 }
 
-const employeeSchema = new Schema<IEmployee>({
+const employeeSchema = new Schema<IEmployeeWithPassword>({
   name: { type: String, required: true },
   surname: { type: String, required: true },
   birthDate: { type: Date, required: true },
@@ -30,9 +30,20 @@ const employeeSchema = new Schema<IEmployee>({
   email: { type: String, required: true, unique: true },
   startDate: { type: Date, default: () => new Date() },
   position: { type: String, required: true },
+  role: { type: String, default: EMPLOYEE_ROLE.COLLABORATOR, enum: EMPLOYEE_ROLE },
   level: { type: String, required: true, enum: EMPLOYEE_LEVEL },
   active: { type: Boolean, default: true },
   avatar: String,
+  password: String,
 });
 
-export const EmployeeModel = model<IEmployee>('Employee', employeeSchema);
+employeeSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.password;
+  },
+});
+
+export const EmployeeModel = models?.Employee || model<IEmployeeWithPassword>('Employee', employeeSchema);

@@ -1,4 +1,4 @@
-import { model, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
 
 export interface IFeature {
   id: string;
@@ -13,4 +13,12 @@ const featureSchema = new Schema<IFeature>({
   description: String,
 });
 
-export const FeatureModel = model<IFeature>('Feature', featureSchema);
+featureSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
+export const FeatureModel = models?.Feature || model<IFeature>('Feature', featureSchema);

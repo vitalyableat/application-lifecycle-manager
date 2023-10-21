@@ -1,4 +1,6 @@
-import { model, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
+
+import { PROJECT_STATUS } from '@/constants/project-status';
 
 export interface IProject {
   id: string;
@@ -10,16 +12,6 @@ export interface IProject {
   employeeIds: ObjectId[];
 }
 
-export enum PROJECT_STATUS {
-  ACTIVE = 'Active',
-  ON_HOLD = 'On Hold',
-  COMPLETED = 'Completed',
-  ABANDONED = 'Abandoned',
-  REOPENED = 'Reopened',
-  PENDING_APPROVAL = 'Pending Approval',
-  CANCELLED = 'Cancelled',
-}
-
 const projectSchema = new Schema<IProject>({
   name: { type: String, required: true },
   description: String,
@@ -29,4 +21,12 @@ const projectSchema = new Schema<IProject>({
   employeeIds: [{ type: SchemaTypes.ObjectId, ref: 'Employee' }],
 });
 
-export const ProjectModel = model<IProject>('Project', projectSchema);
+projectSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
+export const ProjectModel = models?.Project || model<IProject>('Project', projectSchema);

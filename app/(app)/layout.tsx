@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { AppBar } from '@/templates/app-bar';
-import { Navbar } from '@/templates/navbar';
+import { AppBar } from 'components/templates/app-bar';
+import { Navbar } from 'components/templates/navbar';
 
 const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
