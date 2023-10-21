@@ -1,26 +1,38 @@
+import { model, Schema } from 'mongoose';
+
 export interface IEmployee {
   id: string;
   name: string;
   surname: string;
-  birthDate: string;
+  birthDate: Date;
   phone: string;
   email: string;
-  username: string;
-  startDate: string;
+  startDate: Date;
   position: string;
-  level: EmployeeLevel;
+  level: EMPLOYEE_LEVEL;
   active: boolean;
+  avatar?: string;
 }
 
-export type EmployeeLevel =
-  | 'Trainee'
-  | 'Junior-'
-  | 'Junior'
-  | 'Junior+'
-  | 'Middle-'
-  | 'Middle'
-  | 'Middle+'
-  | 'Senior-'
-  | 'Senior'
-  | 'Senior+'
-  | 'Lead';
+export enum EMPLOYEE_LEVEL {
+  TRAINEE = 'Trainee',
+  JUNIOR = 'Junior',
+  MIDDLE = 'Middle',
+  SENIOR = 'Senior',
+  LEAD = 'Lead',
+}
+
+const employeeSchema = new Schema<IEmployee>({
+  name: { type: String, required: true },
+  surname: { type: String, required: true },
+  birthDate: { type: Date, required: true },
+  phone: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  startDate: { type: Date, default: () => new Date() },
+  position: { type: String, required: true },
+  level: { type: String, required: true, enum: EMPLOYEE_LEVEL },
+  active: { type: Boolean, default: true },
+  avatar: String,
+});
+
+export const EmployeeModel = model<IEmployee>('Employee', employeeSchema);

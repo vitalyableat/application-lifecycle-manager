@@ -1,5 +1,5 @@
-const ProjectUserStoriesPage = () => {
-  return <main>ProjectUserStoriesPage</main>;
+const ProjectFeaturesPage = () => {
+  return <main>ProjectFeaturesPage</main>;
 };
 
-export default ProjectUserStoriesPage;
+export default ProjectFeaturesPage;

@@ -17,7 +17,7 @@ export enum APP_ROUTES {
   PROJECT_REQUESTS = '/projects/requests', // RM
   PROJECT_DETAILS = '/projects/:projectId/details',
   PROJECT_DETAILS_EDIT = '/projects/:projectId/details/edit', // PM
-  PROJECT_USER_STORIES = '/projects/:projectId/user-stories', // CRUD - PM
+  PROJECT_FEATURES = '/projects/:projectId/features', // CRUD - PM
   PROJECT_TIMELINE = '/projects/:projectId/timeline', // CRUD - PM, Tasks - Collaborators
   PROJECT_KANBAN_BOARD = '/projects/:projectId/kanban-board',
   PROJECT_REPORT = '/projects/:projectId/report', // Save report as PDF - PM
