@@ -1,5 +1,5 @@
-export enum APP_ROLES {
+export enum EMPLOYEE_ROLE {
   RESOURCE_MANAGER = 'Resource Manager',
   PROJECT_MANAGER = 'Project Manager',
-  COLLABORATOR = 'Collaborator',
+  DEVELOPER = 'Developer',
 }
