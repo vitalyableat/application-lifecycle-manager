@@ -1,18 +1,27 @@
 'use client';
-import { useState } from 'react';
+import { Key, useState } from 'react';
 
 import { Badge, Listbox, ListboxItem } from '@nextui-org/react';
 import { ChevronRightIcon } from '@nextui-org/shared-icons';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { APP_ROUTE } from '@/constants/app-route';
+import useAuthStore from '@/services/auth';
 
 import { NAVBAR_LISTBOX } from './navbar.constants';
 
 export const Navbar = () => {
+  const logout = useAuthStore((state) => state.logout);
   const [navbarOpen, setNavbarOpen] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+
+  const onAction = async (key: Key) => {
+    if ((key as APP_ROUTE) === APP_ROUTE.LOGIN) {
+      await logout();
+    }
+    router.push(key as APP_ROUTE);
+  };
 
   return (
     <Badge
@@ -29,7 +38,7 @@ export const Navbar = () => {
       onClick={() => setNavbarOpen((c) => !c)}>
       <div className={`h-[calc(100vh-64px)] overflow-auto border-r-1 ${navbarOpen ? 'w-[200px]' : 'w-[56px]'}`}>
         <Listbox
-          onAction={(key) => router.push(key as APP_ROUTE)}
+          onAction={onAction}
           variant="flat"
           className="p-0 gap-0"
           aria-label="Navbar Listbox"

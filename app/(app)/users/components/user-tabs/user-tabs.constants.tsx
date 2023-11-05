@@ -1,4 +1,6 @@
-import { EMPLOYEE_LEVEL, IEmployee } from '@/models/employee';
+import { EMPLOYEE_LEVEL } from '@/constants/employee-level';
+import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { IEmployee } from '@/models/employee';
 
 export const MOCKED_USERS: IEmployee[] = [
   {
@@ -11,6 +13,7 @@ export const MOCKED_USERS: IEmployee[] = [
     startDate: new Date(),
     position: 'React Developer',
     level: EMPLOYEE_LEVEL.LEAD,
+    role: EMPLOYEE_ROLE.DEVELOPER,
     active: true,
   },
 ];
