@@ -1,4 +1,5 @@
 module.exports = {
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -9,4 +10,5 @@ module.exports = {
       },
     ],
   },
+  serverComponentsExternalPackages: ['mongoose'],
 };

@@ -1,10 +1,8 @@
 import { FC, PropsWithChildren } from 'react';
 
+import { AppProviders } from 'components/templates/app-providers';
 import type { Metadata } from 'next';
 import { Mulish } from 'next/font/google';
-
-import { AppBar } from '@/templates/app-bar';
-import { AppProviders } from '@/templates/app-providers';
 
 import './globals.css';
 
@@ -20,8 +18,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
     <html lang="en">
       <body className={font.className}>
         <AppProviders>
-          <AppBar />
-          <main className="h-[calc(100vh-64px)]">{children}</main>
+          <main className="h-screen">{children}</main>
         </AppProviders>
       </body>
     </html>
