@@ -5,15 +5,23 @@ import { APP_ROUTE } from '@/constants/app-route';
 import { COOKIE_NAME } from '@/constants/cookie-name';
 import { EmployeeModel, IEmployeeWithPassword } from '@/models/employee';
 import { connectDB } from '@/utils/connect-db';
-import { getResponseWithJwtCookies, verifyRefreshToken } from '@/utils/jwt';
+import { getResponseWithJwtCookies, verifyAccessToken, verifyRefreshToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest) {
-  const response = NextResponse.redirect(new URL(APP_ROUTE.LOGIN, request.url));
+  const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
-  response.cookies.delete(COOKIE_NAME.ACCESS_TOKEN);
-  response.cookies.delete(COOKIE_NAME.REFRESH_TOKEN);
+  try {
+    const { email } = verifyAccessToken(accessToken?.value || '');
+    const employee: IEmployeeWithPassword | null = await EmployeeModel.findOne({ email });
 
-  return response;
+    if (employee) {
+      return NextResponse.json(employee, { status: 200 });
+    } else {
+      throw new Error('No employee found');
+    }
+  } catch (e) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -55,4 +63,13 @@ export async function PUT(request: NextRequest) {
   } catch (e) {
     return NextResponse.json(false, { status: 200 });
   }
+}
+
+export async function DELETE(request: NextRequest) {
+  const response = NextResponse.redirect(new URL(APP_ROUTE.LOGIN, request.url));
+
+  response.cookies.delete(COOKIE_NAME.ACCESS_TOKEN);
+  response.cookies.delete(COOKIE_NAME.REFRESH_TOKEN);
+
+  return response;
 }

@@ -3,8 +3,10 @@ import { api } from '@/services';
 
 import { LoginData } from './types';
 
-export const logout = () => api.get('/auth');
+export const refreshUser = () => api.get<IEmployee>('/auth');
 
 export const login = (data: LoginData) => api.post<IEmployee>('/auth', data);
 
-export const updateTokens = () => api.put<boolean>('/auth');
+export const refreshTokens = () => api.put<boolean>('/auth');
+
+export const logout = () => api.delete('/auth');
