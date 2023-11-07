@@ -21,20 +21,40 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     login: async (loginData: LoginData) => {
       set({ isLoading: true });
 
-      const { data } = await login(loginData);
+      try {
+        const { data } = await login(loginData);
 
-      set({ user: data, isLoading: false });
+        set({ user: data });
+      } catch (e) {
+        console.log(e);
+      } finally {
+        set({ isLoading: false });
+      }
     },
     refreshUser: async () => {
       set({ isLoading: true });
-      const { data } = await refreshUser();
 
-      set({ user: data, isLoading: false });
+      try {
+        const { data } = await refreshUser();
+
+        set({ user: data });
+      } catch (e) {
+        console.log(e);
+      } finally {
+        set({ isLoading: false });
+      }
     },
     logout: async () => {
       set({ isLoading: true });
-      await logout();
-      set({ user: null, isLoading: false });
+
+      try {
+        await logout();
+        set({ user: null, isLoading: false });
+      } catch (e) {
+        console.log(e);
+      } finally {
+        set({ isLoading: false });
+      }
     },
   }),
   shallow,
