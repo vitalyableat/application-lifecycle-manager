@@ -7,7 +7,11 @@ import { Loader } from '@/components/ui/loader';
 import useAuthStore from '@/services/auth';
 
 export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
-  const [isLoading, user, refreshUser] = useAuthStore((state) => [state.isLoading, state.user, state.refreshUser]);
+  const [isFirstRequest, user, refreshUser] = useAuthStore((state) => [
+    state.isFirstRequest,
+    state.user,
+    state.refreshUser,
+  ]);
 
   useEffect(() => {
     if (!user) {
@@ -15,7 +19,7 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
     }
   }, []);
 
-  if (isLoading) {
+  if (isFirstRequest) {
     return <Loader />;
   }
 

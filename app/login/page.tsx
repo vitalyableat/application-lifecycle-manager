@@ -1,6 +1,5 @@
+import { LoginForm } from '@/components/forms/login-form';
 import { LogoIcon } from '@/components/icons';
-
-import { LoginForm } from './components/login-form';
 
 const LoginPage = () => {
   return (

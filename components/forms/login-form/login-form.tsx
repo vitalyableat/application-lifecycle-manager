@@ -24,9 +24,13 @@ export const LoginForm: FC = () => {
   const { handleSubmit, values, errors, handleChange } = useFormik<LoginData>({
     initialValues: { email: '', password: '' },
     validationSchema: LoginValidationSchema,
-    onSubmit: async (values) => {
-      await login(values);
-      router.push(APP_ROUTE.HOME);
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await login(values);
+        router.push(APP_ROUTE.HOME);
+      } catch (e) {
+        resetForm();
+      }
     },
     validateOnChange: false,
   });

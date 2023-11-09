@@ -7,10 +7,10 @@ export enum APP_ROUTE {
   PROFILE_EDIT = '/profile/edit', // user
   SETTINGS = '/settings', // user
 
-  USERS = '/users',
-  USER_DETAILS = '/users/:userId',
-  USER_DETAILS_EDIT = '/users/:userId/edit', // RM
-  USER_CREATE = '/users/create', // RM
+  EMPLOYEES = '/employees',
+  EMPLOYEE_DETAILS = '/employees/:employeeId',
+  EMPLOYEE_DETAILS_EDIT = '/employees/:employeeId/edit', // RM
+  EMPLOYEE_CREATE = '/employees/create', // RM
 
   PROJECTS = '/projects',
   PROJECT_CREATE = '/projects/create', // PM

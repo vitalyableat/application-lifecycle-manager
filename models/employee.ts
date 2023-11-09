@@ -7,7 +7,7 @@ export interface IEmployee {
   id: string;
   name: string;
   surname: string;
-  birthDate: Date;
+  birthDate: string;
   phone: string;
   email: string;
   startDate: Date;
@@ -25,13 +25,13 @@ export interface IEmployeeWithPassword extends IEmployee {
 const employeeSchema = new Schema<IEmployeeWithPassword>({
   name: { type: String, required: true },
   surname: { type: String, required: true },
-  birthDate: { type: Date, required: true },
+  birthDate: { type: String },
   phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   startDate: { type: Date, default: () => new Date() },
-  position: { type: String, required: true },
+  position: { type: String, default: '' },
   role: { type: String, default: EMPLOYEE_ROLE.DEVELOPER, enum: EMPLOYEE_ROLE },
-  level: { type: String, required: true, enum: EMPLOYEE_LEVEL },
+  level: { type: String, default: EMPLOYEE_LEVEL.JUNIOR, enum: EMPLOYEE_LEVEL },
   active: { type: Boolean, default: true },
   avatar: String,
   password: String,

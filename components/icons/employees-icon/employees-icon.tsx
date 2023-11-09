@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { IconSvgProps } from '@nextui-org/shared-icons/dist/types';
 
-export const UsersIcon: FC<IconSvgProps> = (props) => {
+export const EmployeesIcon: FC<IconSvgProps> = (props) => {
   return (
     <svg height="24" width="24" viewBox="0 0 24 24" {...props}>
       <g clipPath="url(#clip0_59_3)">
