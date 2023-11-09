@@ -1,3 +1,6 @@
+import toast from 'react-hot-toast';
+
+import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
@@ -24,7 +27,7 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
 
         set({ employees: data });
       } catch (e) {
-        console.log(e);
+        toast.error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
       }
@@ -37,7 +40,7 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
 
         set((state) => ({ employees: [...state.employees, data] }));
       } catch (e) {
-        console.log('CATCH ', e);
+        toast.error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
       }

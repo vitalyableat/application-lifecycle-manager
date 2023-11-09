@@ -1,3 +1,6 @@
+import toast from 'react-hot-toast';
+
+import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
@@ -8,6 +11,7 @@ import { LoginData } from './types';
 
 interface AuthState {
   user: IEmployee | null;
+  isFirstRequest: boolean;
   isLoading: boolean;
   login: (loginData: LoginData) => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -17,7 +21,8 @@ interface AuthState {
 const useAuthStore = createWithEqualityFn<AuthState>()(
   (set) => ({
     user: null,
-    isLoading: true,
+    isFirstRequest: true,
+    isLoading: false,
     login: async (loginData: LoginData) => {
       set({ isLoading: true });
 
@@ -26,22 +31,25 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
 
         set({ user: data });
       } catch (e) {
-        console.log(e);
+        toast.error((e as AxiosResponse).request.statusText);
+        throw new Error();
       } finally {
         set({ isLoading: false });
       }
     },
     refreshUser: async () => {
-      set({ isLoading: true });
+      set({ isFirstRequest: true });
 
       try {
         const { data } = await refreshUser();
 
         set({ user: data });
       } catch (e) {
-        console.log(e);
+        if ((e as AxiosResponse).request.status !== 403) {
+          toast.error((e as AxiosResponse).request.statusText);
+        }
       } finally {
-        set({ isLoading: false });
+        set({ isFirstRequest: false });
       }
     },
     logout: async () => {
@@ -51,7 +59,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
         await logout();
         set({ user: null, isLoading: false });
       } catch (e) {
-        console.log(e);
+        toast.error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
       }
