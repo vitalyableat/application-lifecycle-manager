@@ -12,7 +12,7 @@ import { verifyAccessToken } from '@/utils/jwt';
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
-  if (!accessToken) {
+  if (!accessToken?.value) {
     return NextResponse.json(null, SERVER_STATUS[401]);
   }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const employee = await request.json();
 
-  if (!accessToken) {
+  if (!accessToken?.value) {
     return NextResponse.json(null, SERVER_STATUS[401]);
   }
 
@@ -53,7 +53,40 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(null, {
         status: 409,
-        statusText: `Employee with ${key} = ${value} already exists`,
+        statusText: `Employee with ${key} ${value} already exists`,
+      });
+    }
+
+    return NextResponse.json(null, SERVER_STATUS[500]);
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
+  const employee = await request.json();
+
+  if (!accessToken?.value) {
+    return NextResponse.json(null, SERVER_STATUS[401]);
+  }
+
+  try {
+    const { role } = verifyAccessToken(accessToken.value);
+
+    if (role !== EMPLOYEE_ROLE.RESOURCE_MANAGER) {
+      return NextResponse.json(null, SERVER_STATUS[403]);
+    }
+
+    await connectDB();
+    const data = await EmployeeModel.findOneAndUpdate({ _id: employee.id }, employee);
+
+    return NextResponse.json(data, SERVER_STATUS[201]);
+  } catch (error) {
+    if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
+      const [key, value] = Object.entries(error.keyValue)[0];
+
+      return NextResponse.json(null, {
+        status: 409,
+        statusText: `Employee with ${key} ${value} already exists`,
       });
     }
 

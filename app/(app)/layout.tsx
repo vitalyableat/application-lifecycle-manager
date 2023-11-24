@@ -11,7 +11,7 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
         <div className="flex">
           <Navbar />
           <div className="bg-default-100 w-full max-h-full p-6">
-            <div className="bg-white w-full h-full overflow-hidden flex-col rounded-lg shadow">{children}</div>
+            <div className="relative bg-white w-full h-full overflow-hidden flex-col rounded-lg shadow">{children}</div>
           </div>
         </div>
       </main>

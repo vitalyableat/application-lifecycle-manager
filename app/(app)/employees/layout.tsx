@@ -9,7 +9,9 @@ const EmployeesLayout: FC<PropsWithChildren> = ({ children }) => {
       <EmployeeTabs />
       <div className="flex-col w-full">
         <EmployeeHeader />
-        <div className="bg-white min-w-full max-h-[calc(100vh-184px)] overflow-auto p-6 flex-col">{children}</div>
+        <div className="relative bg-white min-w-full h-full max-h-[calc(100vh-184px)] overflow-auto p-6 flex-col">
+          {children}
+        </div>
       </div>
     </div>
   );

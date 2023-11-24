@@ -11,7 +11,7 @@ import { getResponseWithJwtCookies, verifyAccessToken, verifyRefreshToken } from
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
-  if (!accessToken) {
+  if (!accessToken?.value) {
     return NextResponse.json(null, SERVER_STATUS[401]);
   }
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(null, { status: 400, statusText: 'Wrong email or password' });
     }
 
-    const response = NextResponse.json(employee, SERVER_STATUS[200]);
+    const response = await NextResponse.json(employee, SERVER_STATUS[200]);
 
     return getResponseWithJwtCookies(response, employee.email, employee.role);
   } catch (e) {
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const refreshToken = request.cookies.get(COOKIE_NAME.REFRESH_TOKEN);
 
-  if (!refreshToken) {
+  if (!refreshToken?.value) {
     return NextResponse.json(null, SERVER_STATUS[403]);
   }
 

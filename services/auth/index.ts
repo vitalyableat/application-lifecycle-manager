@@ -32,7 +32,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
         set({ user: data });
       } catch (e) {
         toast.error((e as AxiosResponse).request.statusText);
-        throw new Error();
+        throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
       }
@@ -59,7 +59,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
         await logout();
         set({ user: null, isLoading: false });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error((e as AxiosResponse).request?.statusText);
       } finally {
         set({ isLoading: false });
       }

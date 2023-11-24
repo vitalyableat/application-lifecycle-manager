@@ -25,13 +25,13 @@ export const EmployeeTabs: FC = () => {
   return (
     <div className="min-w-[200px] w-80 border-r-1 relative">
       {isLoading && <Loader />}
-      <div className="p-2">
+      <div className="px-2 py-4">
         <Search />
       </div>
       <Listbox
         onAction={(key) => router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', key as string))}
         variant="flat"
-        className="px-0 py-2 gap-0 overflow-auto h-[calc(100vh-168px)] max-h-[calc(100vh-160px)]"
+        className="p-0 gap-0 overflow-auto h-[calc(100vh-184px)] max-h-[calc(100vh-184px)]"
         aria-label="Employee Listbox"
         itemClasses={{ title: 'font-bold', description: 'text-default-900' }}>
         {employees.map(({ id, name, surname, position, level }) => (

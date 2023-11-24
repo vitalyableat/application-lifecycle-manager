@@ -6,8 +6,9 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
-import { Loader } from '@/components/ui/loader';
+import { Loader } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
+import { IEmployee } from '@/models/employee';
 import useEmployeeStore from '@/services/employee';
 import { EmployeePersonalData } from '@/services/employee/types';
 import { formatPhone } from '@/utils/format-phone';
@@ -22,39 +23,55 @@ const EmployeePersonalDataValidationSchema: ObjectSchema<EmployeePersonalData> =
   birthDate: string(),
 });
 
-export const EmployeePersonalDataForm: FC = () => {
+type Props = {
+  employee?: IEmployee;
+};
+
+export const EmployeePersonalDataForm: FC<Props> = ({ employee }) => {
   const router = useRouter();
-  const [isLoading, addEmployee] = useEmployeeStore((state) => [state.isLoading, state.addEmployee]);
-  const { handleSubmit, values, errors, handleChange } = useFormik<EmployeePersonalData>({
+  const [isLoading, addEmployee, updateEmployee] = useEmployeeStore((state) => [
+    state.isLoading,
+    state.addEmployee,
+    state.updateEmployee,
+  ]);
+  const { handleSubmit, values, errors, handleChange, dirty } = useFormik<EmployeePersonalData>({
     initialValues: {
-      name: '',
-      surname: '',
-      phone: '',
-      email: '',
-      birthDate: '',
+      name: employee?.name || '',
+      surname: employee?.surname || '',
+      phone: employee?.phone || '',
+      email: employee?.email || '',
+      birthDate: employee?.birthDate || '',
     },
     validationSchema: EmployeePersonalDataValidationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setFieldValue, resetForm }) => {
       try {
-        await addEmployee({ ...values, phone: formatPhone(values.phone) });
-        // router.push(APP_ROUTE.EMPLOYEES);
+        const { id } = employee
+          ? await updateEmployee({ ...values, phone: formatPhone(values.phone), id: employee.id })
+          : await addEmployee({ ...values, phone: formatPhone(values.phone) });
+
+        resetForm();
+        router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', id));
       } catch (e) {
-        console.log(e);
+        const errorMessage = (e as Error).message;
+
+        errorMessage.includes('phone') && setFieldValue('phone', '');
+        errorMessage.includes('email') && setFieldValue('email', '');
       }
     },
     validateOnChange: false,
   });
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex flex-col w-full h-full items-center justify-center gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
       <p className="text-xl font-bold">Personal Information</p>
-      <div className="flex flex-wrap justify-center gap-5">
+      <div className="form-fields">
         <Input
           label="Name"
           name="name"
           onChange={handleChange}
           value={values.name}
           errorMessage={errors.name}
+          isInvalid={!!errors.name}
           variant="bordered"
           className="max-w-xs"
         />
@@ -64,6 +81,7 @@ export const EmployeePersonalDataForm: FC = () => {
           onChange={handleChange}
           value={values.surname}
           errorMessage={errors.surname}
+          isInvalid={!!errors.surname}
           variant="bordered"
           className="max-w-xs"
         />
@@ -73,6 +91,7 @@ export const EmployeePersonalDataForm: FC = () => {
           onChange={handleChange}
           value={values.phone}
           errorMessage={errors.phone}
+          isInvalid={!!errors.phone}
           variant="bordered"
           className="max-w-xs"
         />
@@ -82,6 +101,7 @@ export const EmployeePersonalDataForm: FC = () => {
           onChange={handleChange}
           value={values.email}
           errorMessage={errors.email}
+          isInvalid={!!errors.email}
           variant="bordered"
           className="max-w-xs"
         />
@@ -93,15 +113,16 @@ export const EmployeePersonalDataForm: FC = () => {
           onChange={handleChange}
           value={values.birthDate}
           errorMessage={errors.birthDate}
+          isInvalid={!!errors.birthDate}
           variant="bordered"
           className="max-w-xs"
         />
       </div>
 
-      <Button color="secondary" className="font-bold" type="submit">
+      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-300" type="submit">
         Save
       </Button>
-      {isLoading && <Loader />}
+      {/*{!isLoading && <Loader />}*/}
     </form>
   );
 };

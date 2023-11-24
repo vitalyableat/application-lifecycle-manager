@@ -1,6 +1,7 @@
 import { FC, forwardRef } from 'react';
 
-import { Input, InputProps } from '@nextui-org/react';
+import { Input } from '@nextui-org/input';
+import { InputProps } from '@nextui-org/react';
 import { SearchIcon } from '@nextui-org/shared-icons';
 
 import { InputClassNames } from './search.styles';

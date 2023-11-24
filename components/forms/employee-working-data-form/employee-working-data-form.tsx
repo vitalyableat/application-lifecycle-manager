@@ -8,6 +8,7 @@ import { object, ObjectSchema, string } from 'yup';
 
 import { Loader } from '@/components/ui/loader';
 import { EMPLOYEE_LEVEL } from '@/constants/employee-level';
+import { IEmployee } from '@/models/employee';
 import useEmployeeStore from '@/services/employee';
 import { EmployeeWorkingData } from '@/services/employee/types';
 
@@ -19,14 +20,18 @@ const EmployeeWorkingDataValidationSchema: ObjectSchema<EmployeeWorkingData> = o
   active: string().required(),
 });
 
-export const EmployeeWorkingDataForm: FC = () => {
+type Props = {
+  employee?: IEmployee;
+};
+
+export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
   const router = useRouter();
   const [isLoading, addEmployee] = useEmployeeStore((state) => [state.isLoading, state.addEmployee]);
   const { handleSubmit, values, errors, handleChange } = useFormik<EmployeeWorkingData>({
     initialValues: {
-      position: '',
-      level: EMPLOYEE_LEVEL.JUNIOR,
-      active: 'true',
+      position: employee?.position || '',
+      level: employee?.level || EMPLOYEE_LEVEL.JUNIOR,
+      active: employee?.active.toString() || 'true',
     },
     validationSchema: EmployeeWorkingDataValidationSchema,
     onSubmit: async (values) => {
@@ -38,7 +43,7 @@ export const EmployeeWorkingDataForm: FC = () => {
   });
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex flex-col w-full h-full items-center justify-center gap-5">
+    <form onSubmit={handleSubmit} className="relative flex flex-col w-full items-center justify-center gap-5">
       <p className="text-xl font-bold">Working Information</p>
       <div className="form-fields">
         <Input
