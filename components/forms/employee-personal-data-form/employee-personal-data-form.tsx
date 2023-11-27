@@ -6,9 +6,9 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
-import { Loader } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
 import { IEmployee } from '@/models/employee';
+import useAuthStore from '@/services/auth';
 import useEmployeeStore from '@/services/employee';
 import { EmployeePersonalData } from '@/services/employee/types';
 import { formatPhone } from '@/utils/format-phone';
@@ -25,15 +25,13 @@ const EmployeePersonalDataValidationSchema: ObjectSchema<EmployeePersonalData> =
 
 type Props = {
   employee?: IEmployee;
+  isProfile?: boolean;
 };
 
-export const EmployeePersonalDataForm: FC<Props> = ({ employee }) => {
+export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => {
   const router = useRouter();
-  const [isLoading, addEmployee, updateEmployee] = useEmployeeStore((state) => [
-    state.isLoading,
-    state.addEmployee,
-    state.updateEmployee,
-  ]);
+  const updateUser = useAuthStore((state) => state.updateUser);
+  const [addEmployee, updateEmployee] = useEmployeeStore((state) => [state.addEmployee, state.updateEmployee]);
   const { handleSubmit, values, errors, handleChange, dirty } = useFormik<EmployeePersonalData>({
     initialValues: {
       name: employee?.name || '',
@@ -43,14 +41,19 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee }) => {
       birthDate: employee?.birthDate || '',
     },
     validationSchema: EmployeePersonalDataValidationSchema,
-    onSubmit: async (values, { setFieldValue, resetForm }) => {
+    onSubmit: async (values, { setFieldValue }) => {
       try {
-        const { id } = employee
-          ? await updateEmployee({ ...values, phone: formatPhone(values.phone), id: employee.id })
-          : await addEmployee({ ...values, phone: formatPhone(values.phone) });
+        if (isProfile) {
+          await updateUser({ ...values, phone: formatPhone(values.phone), id: employee?.id });
+          router.push(APP_ROUTE.PROFILE);
+        } else {
+          const { id } = employee
+            ? await updateEmployee({ ...values, phone: formatPhone(values.phone), id: employee.id })
+            : await addEmployee({ ...values, phone: formatPhone(values.phone) });
 
-        resetForm();
-        router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', id));
+          router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', id));
+          router.refresh();
+        }
       } catch (e) {
         const errorMessage = (e as Error).message;
 
@@ -122,7 +125,6 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee }) => {
       <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-300" type="submit">
         Save
       </Button>
-      {/*{!isLoading && <Loader />}*/}
     </form>
   );
 };

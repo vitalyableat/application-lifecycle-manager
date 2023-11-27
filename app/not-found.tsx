@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { NotFound } from '@/components/templates/not-found';
+import { NotFound } from 'components/ui/not-found';
 
 const NotFoundPage: FC = () => {
   return <NotFound>Page not found :(</NotFound>;

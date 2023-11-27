@@ -5,9 +5,9 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
 import { IEmployee } from '@/models/employee';
-import { login, logout, refreshUser } from '@/services/auth/api';
+import { changePassword, login, logout, refreshUser, updateUser } from '@/services/auth/api';
 
-import { LoginData } from './types';
+import { ChangePasswordData, LoginData } from './types';
 
 interface AuthState {
   user: IEmployee | null;
@@ -16,6 +16,8 @@ interface AuthState {
   login: (loginData: LoginData) => Promise<void>;
   refreshUser: () => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (userUpdateData: Partial<IEmployee>) => Promise<void>;
+  changePassword: (changePasswordData: ChangePasswordData & { id: string }) => Promise<void>;
 }
 
 const useAuthStore = createWithEqualityFn<AuthState>()(
@@ -45,8 +47,8 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
 
         set({ user: data });
       } catch (e) {
-        if ((e as AxiosResponse).request.status !== 403) {
-          toast.error((e as AxiosResponse).request.statusText);
+        if ((e as AxiosResponse).request.status !== 401) {
+          await useAuthStore.getState().logout();
         }
       } finally {
         set({ isFirstRequest: false });
@@ -60,6 +62,32 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
         set({ user: null, isLoading: false });
       } catch (e) {
         toast.error((e as AxiosResponse).request?.statusText);
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    updateUser: async (userUpdateData: Partial<IEmployee>) => {
+      set({ isLoading: true });
+
+      try {
+        const { data } = await updateUser(userUpdateData);
+
+        set({ user: data });
+      } catch (e) {
+        toast.error((e as AxiosResponse).request.statusText);
+        throw new Error((e as AxiosResponse).request.statusText);
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    changePassword: async (changePasswordData: ChangePasswordData & { id: string }) => {
+      set({ isLoading: true });
+
+      try {
+        await changePassword(changePasswordData);
+      } catch (e) {
+        toast.error((e as AxiosResponse).request.statusText);
+        throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
       }

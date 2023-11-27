@@ -22,6 +22,7 @@ export const Loader: FC = () => {
       const parent = findRelative(ref.current);
 
       if (parent) {
+        setTop(parent.scrollTop);
         const handleScroll = (event: Event) => {
           setTop((event.target as HTMLElement).scrollTop);
         };

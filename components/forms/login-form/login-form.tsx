@@ -1,12 +1,12 @@
 'use client';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { Button, Input } from '@nextui-org/react';
-import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
+import { PasswordInput } from '@/components/ui';
 import { Loader } from '@/components/ui/loader';
 import { APP_ROUTE } from '@/constants/app-route';
 import useAuthStore from '@/services/auth';
@@ -19,7 +19,6 @@ const LoginValidationSchema: ObjectSchema<LoginData> = object({
 
 export const LoginForm: FC = () => {
   const router = useRouter();
-  const [visible, setVisible] = useState(false);
   const [login, isLoading] = useAuthStore((state) => [state.login, state.isLoading]);
   const { handleSubmit, values, errors, handleChange } = useFormik<LoginData>({
     initialValues: { email: '', password: '' },
@@ -47,24 +46,12 @@ export const LoginForm: FC = () => {
         variant="bordered"
         className="max-w-xs"
       />
-      <Input
-        type={visible ? 'text' : 'password'}
+      <PasswordInput
         label="Password"
         name="password"
         onChange={handleChange}
         value={values.password}
         errorMessage={errors.password}
-        variant="bordered"
-        className="max-w-xs"
-        endContent={
-          <button className="focus:outline-none" type="button" onClick={() => setVisible((v) => !v)}>
-            {visible ? (
-              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
-        }
       />
       <Button color="secondary" className="font-bold" type="submit">
         Login

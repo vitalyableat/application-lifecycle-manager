@@ -1,5 +1,5 @@
 'use client';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -10,6 +10,7 @@ import { APP_ROUTE } from '@/constants/app-route';
 import useEmployeeStore from '@/services/employee';
 
 export const EmployeeTabs: FC = () => {
+  const [search, setSearch] = useState('');
   const [isLoading, employees, getEmployees] = useEmployeeStore((state) => [
     state.isLoading,
     state.employees,
@@ -22,11 +23,16 @@ export const EmployeeTabs: FC = () => {
     getEmployees();
   }, []);
 
+  const filteredEmployees = useMemo(
+    () => employees.filter(({ name, surname }) => (name + ' ' + surname).toUpperCase().includes(search.toUpperCase())),
+    [search, employees],
+  );
+
   return (
     <div className="min-w-[200px] w-80 border-r-1 relative">
       {isLoading && <Loader />}
       <div className="px-2 py-4">
-        <Search />
+        <Search value={search} onChange={setSearch} />
       </div>
       <Listbox
         onAction={(key) => router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', key as string))}
@@ -34,7 +40,7 @@ export const EmployeeTabs: FC = () => {
         className="p-0 gap-0 overflow-auto h-[calc(100vh-184px)] max-h-[calc(100vh-184px)]"
         aria-label="Employee Listbox"
         itemClasses={{ title: 'font-bold', description: 'text-default-900' }}>
-        {employees.map(({ id, name, surname, position, level }) => (
+        {filteredEmployees.map(({ id, name, surname, position, level, active }) => (
           <ListboxItem
             title={name + ' ' + surname}
             description={

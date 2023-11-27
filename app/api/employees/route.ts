@@ -77,7 +77,7 @@ export async function PUT(request: NextRequest) {
     }
 
     await connectDB();
-    const data = await EmployeeModel.findOneAndUpdate({ _id: employee.id }, employee);
+    const data = await EmployeeModel.findOneAndUpdate({ _id: employee.id }, employee, { new: true });
 
     return NextResponse.json(data, SERVER_STATUS[201]);
   } catch (error) {

@@ -5,10 +5,16 @@ import { Avatar } from '@nextui-org/react';
 
 type Props = {
   avatar?: string;
+  withHover?: boolean;
 };
 
-export const AvatarPreview: FC<Props> = ({ avatar }) => {
+export const AvatarPreview: FC<Props> = ({ avatar, withHover }) => {
   return (
-    <Avatar radius="sm" src={avatar} color="secondary" className="w-60 h-60 cursor-pointer m-auto bg-secondary-100" />
+    <Avatar
+      radius="sm"
+      src={avatar}
+      color="secondary"
+      className={`w-60 h-60 ${withHover && 'cursor-pointer'} m-auto bg-secondary-100`}
+    />
   );
 };

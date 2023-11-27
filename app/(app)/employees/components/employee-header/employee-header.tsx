@@ -1,16 +1,20 @@
 'use client';
 import { FC, useEffect, useMemo } from 'react';
 
-import { Button } from '@nextui-org/react';
-import { AddNoteBulkIcon, EditDocumentBulkIcon } from '@nextui-org/shared-icons';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
+import { ActionButton } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
+import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import useAuthStore from '@/services/auth';
 import useEmployeeStore from '@/services/employee';
 
 export const EmployeeHeader: FC = () => {
+  const user = useAuthStore((state) => state.user);
   const { employeeId } = useParams<{ employeeId?: string }>();
   const router = useRouter();
+  const pathname = usePathname();
+  const shouldShowBack = pathname.includes('/create') || pathname.includes('edit');
   const [isLoading, employees] = useEmployeeStore((state) => [state.isLoading, state.employees]);
   const employee = useMemo(() => employees.find(({ id }) => id === employeeId), [employees, employeeId]);
 
@@ -28,18 +32,18 @@ export const EmployeeHeader: FC = () => {
         </p>
       )}
 
-      <Button
-        className="absolute right-4 top-4"
-        isIconOnly
-        color="secondary"
-        variant="flat"
-        onClick={() =>
-          router.push(
-            employeeId ? APP_ROUTE.EMPLOYEE_DETAILS_EDIT.replace(':employeeId', employeeId) : APP_ROUTE.EMPLOYEE_CREATE,
-          )
-        }>
-        {employeeId ? <EditDocumentBulkIcon fontSize={24} /> : <AddNoteBulkIcon fontSize={24} />}
-      </Button>
+      {user?.role === EMPLOYEE_ROLE.RESOURCE_MANAGER && (
+        <ActionButton
+          icon={shouldShowBack ? 'back' : employeeId ? 'edit' : 'create'}
+          onClick={() =>
+            router.push(
+              employeeId
+                ? APP_ROUTE.EMPLOYEE_DETAILS_EDIT.replace(':employeeId', employeeId)
+                : APP_ROUTE.EMPLOYEE_CREATE,
+            )
+          }
+        />
+      )}
     </div>
   );
 };

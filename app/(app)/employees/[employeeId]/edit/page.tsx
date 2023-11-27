@@ -1,16 +1,16 @@
 import { FC } from 'react';
 
 import { EmployeePersonalDataForm, EmployeeWorkingDataForm } from '@/components/forms';
-import { Loader } from '@/components/ui';
-import useEmployeeStore from '@/services/employee';
 import { getEmployeeByIdHandler } from '@/services/employee/handlers';
+
+import { ShowLoader } from './components/show-loader';
 
 const EmployeeDetailsEditPage: FC<{ params: { employeeId: string } }> = async ({ params }) => {
   const employee = await getEmployeeByIdHandler(params.employeeId);
 
   return (
     <main className="flex flex-col gap-6">
-      {useEmployeeStore.getState().isLoading && <Loader />}
+      <ShowLoader />
       <EmployeePersonalDataForm employee={employee} />
       <EmployeeWorkingDataForm employee={employee} />
     </main>

@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { email } = verifyAccessToken(accessToken.value);
+    const { id } = verifyAccessToken(accessToken.value);
 
     await connectDB();
-    const employee: IEmployeeWithPassword | null = await EmployeeModel.findOne({ email });
+    const employee: IEmployeeWithPassword | null = await EmployeeModel.findOne({ _id: id });
 
     if (employee) {
       return NextResponse.json(employee, SERVER_STATUS[200]);
@@ -49,9 +49,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(null, { status: 400, statusText: 'Wrong email or password' });
     }
 
+    if (!employee.active) {
+      return NextResponse.json(null, {
+        ...SERVER_STATUS[403],
+        statusText: 'Your account is no longer active',
+      });
+    }
+
     const response = await NextResponse.json(employee, SERVER_STATUS[200]);
 
-    return getResponseWithJwtCookies(response, employee.email, employee.role);
+    return getResponseWithJwtCookies(response, employee.id, employee.role);
   } catch (e) {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }
@@ -65,15 +72,15 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const { email } = verifyRefreshToken(refreshToken.value);
+    const { id } = verifyRefreshToken(refreshToken.value);
 
     await connectDB();
-    const employee: IEmployeeWithPassword | null = await EmployeeModel.findOne({ email });
+    const employee: IEmployeeWithPassword | null = await EmployeeModel.findOne({ _id: id });
 
     if (employee) {
       const response = NextResponse.json(true, SERVER_STATUS[200]);
 
-      return getResponseWithJwtCookies(response, employee.email, employee.role);
+      return getResponseWithJwtCookies(response, employee.id, employee.role);
     } else {
       return NextResponse.json(null, SERVER_STATUS[404]);
     }
