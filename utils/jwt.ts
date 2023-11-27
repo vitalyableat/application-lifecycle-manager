@@ -4,16 +4,16 @@ import { NextResponse } from 'next/server';
 import { COOKIE_NAME } from '@/constants/cookie-name';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 
-const generateAccessToken = (payload: { email: string; role: EMPLOYEE_ROLE }): string => {
+const generateAccessToken = (payload: { id: string; role: EMPLOYEE_ROLE }): string => {
   return sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: 60 * 60 });
 };
 
-const generateRefreshToken = (email: string): string => {
-  return sign({ email }, process.env.JWT_REFRESH_SECRET, { expiresIn: 60 * 60 * 24 * 7 });
+const generateRefreshToken = (id: string): string => {
+  return sign({ id }, process.env.JWT_REFRESH_SECRET, { expiresIn: 60 * 60 * 24 * 7 });
 };
 
 interface AccessJwtPayload extends JwtPayload {
-  email: string;
+  id: string;
   role: EMPLOYEE_ROLE;
 }
 
@@ -29,9 +29,9 @@ export const verifyRefreshToken = (refreshToken: string): RefreshJwtPayload => {
   return verify(refreshToken, process.env.JWT_REFRESH_SECRET) as RefreshJwtPayload;
 };
 
-export const getResponseWithJwtCookies = (response: NextResponse, email: string, role: EMPLOYEE_ROLE): NextResponse => {
-  const accessToken = generateAccessToken({ email, role });
-  const refreshToken = generateRefreshToken(email);
+export const getResponseWithJwtCookies = (response: NextResponse, id: string, role: EMPLOYEE_ROLE): NextResponse => {
+  const accessToken = generateAccessToken({ id, role });
+  const refreshToken = generateRefreshToken(id);
 
   response.cookies.set(COOKIE_NAME.ACCESS_TOKEN, accessToken, {
     httpOnly: true,

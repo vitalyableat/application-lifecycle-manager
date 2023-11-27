@@ -16,7 +16,7 @@ export const ProjectTabs: FC = () => {
 
   return (
     <div className="min-w-[200px] w-80 border-r-1">
-      <div className="p-2">
+      <div className="px-2 py-4">
         <Search />
       </div>
       <Accordion

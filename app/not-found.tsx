@@ -1,7 +1,9 @@
 import { FC } from 'react';
 
+import { NotFound } from 'components/ui/not-found';
+
 const NotFoundPage: FC = () => {
-  return <div className="flex w-full h-full justify-center items-center text-3xl font-bold">Page not found :(</div>;
+  return <NotFound>Page not found :(</NotFound>;
 };
 
 export default NotFoundPage;

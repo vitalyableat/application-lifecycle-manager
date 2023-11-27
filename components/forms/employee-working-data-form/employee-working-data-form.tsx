@@ -1,17 +1,17 @@
 'use client';
 import { FC } from 'react';
+import toast from 'react-hot-toast';
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
-import { Loader } from '@/components/ui/loader';
+import { APP_ROUTE } from '@/constants/app-route';
 import { EMPLOYEE_LEVEL } from '@/constants/employee-level';
+import { IEmployee } from '@/models/employee';
 import useEmployeeStore from '@/services/employee';
 import { EmployeeWorkingData } from '@/services/employee/types';
-
-import 'yup-phone-lite';
 
 const EmployeeWorkingDataValidationSchema: ObjectSchema<EmployeeWorkingData> = object({
   position: string().required(),
@@ -19,26 +19,35 @@ const EmployeeWorkingDataValidationSchema: ObjectSchema<EmployeeWorkingData> = o
   active: string().required(),
 });
 
-export const EmployeeWorkingDataForm: FC = () => {
+type Props = {
+  employee: IEmployee;
+};
+
+export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
   const router = useRouter();
-  const [isLoading, addEmployee] = useEmployeeStore((state) => [state.isLoading, state.addEmployee]);
-  const { handleSubmit, values, errors, handleChange } = useFormik<EmployeeWorkingData>({
+  const [updateEmployee] = useEmployeeStore((state) => [state.updateEmployee]);
+  const { handleSubmit, values, errors, handleChange, dirty } = useFormik<EmployeeWorkingData>({
     initialValues: {
-      position: '',
-      level: EMPLOYEE_LEVEL.JUNIOR,
-      active: 'true',
+      position: employee?.position || '',
+      level: employee?.level || EMPLOYEE_LEVEL.JUNIOR,
+      active: String(employee?.active) || 'true',
     },
     validationSchema: EmployeeWorkingDataValidationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      // await addEmployee(values);
-      // router.push(APP_ROUTE.EMPLOYEES);
+      try {
+        const { id } = await updateEmployee({ ...values, active: values.active === 'true', id: employee.id });
+
+        router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', id));
+        router.refresh();
+      } catch (e) {
+        toast.error((e as Error).message);
+      }
     },
     validateOnChange: false,
   });
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex flex-col w-full h-full items-center justify-center gap-5">
+    <form onSubmit={handleSubmit} className="relative flex flex-col w-full items-center justify-center gap-5">
       <p className="text-xl font-bold">Working Information</p>
       <div className="form-fields">
         <Input
@@ -53,6 +62,7 @@ export const EmployeeWorkingDataForm: FC = () => {
         <Select
           label="Level"
           name="level"
+          defaultSelectedKeys={[values.level]}
           onChange={handleChange}
           value={values.level}
           errorMessage={errors.level}
@@ -67,6 +77,7 @@ export const EmployeeWorkingDataForm: FC = () => {
         <Select
           label="Status"
           name="active"
+          defaultSelectedKeys={[String(values.active)]}
           onChange={handleChange}
           value={values.active}
           errorMessage={errors.active}
@@ -81,10 +92,9 @@ export const EmployeeWorkingDataForm: FC = () => {
         </Select>
       </div>
 
-      <Button color="secondary" className="font-bold" type="submit">
+      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-300" type="submit">
         Save
       </Button>
-      {isLoading && <Loader />}
     </form>
   );
 };

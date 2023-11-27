@@ -1,7 +1,10 @@
-'use client';
+import { EmployeePreview } from '@/components/ui';
+import { getEmployeeByIdHandler } from '@/services/employee/handlers';
 
-const EmployeeDetailsPage = ({ params }: { params: { employeeId: string } }) => {
-  return <main>EmployeeDetailsPage</main>;
+const EmployeeDetailsPage = async ({ params }: { params: { employeeId: string } }) => {
+  const employee = await getEmployeeByIdHandler(params.employeeId);
+
+  return <EmployeePreview employee={employee} />;
 };
 
 export default EmployeeDetailsPage;
