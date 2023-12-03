@@ -12,13 +12,13 @@ const EmployeeDetailsEditPage: FC<{ params: { employeeId: string } }> = async ({
   const employee = await getEmployeeByIdHandler(params.employeeId);
 
   return (
-    <main className="flex flex-col gap-6">
-      <RoleCheck role={EMPLOYEE_ROLE.RESOURCE_MANAGER} redirect={APP_ROUTE.EMPLOYEES}>
+    <RoleCheck role={EMPLOYEE_ROLE.RESOURCE_MANAGER} redirect={APP_ROUTE.EMPLOYEES}>
+      <main className="flex flex-col gap-6">
         <ShowLoader />
         <EmployeePersonalDataForm employee={employee} />
         <EmployeeWorkingDataForm employee={employee} />
-      </RoleCheck>
-    </main>
+      </main>
+    </RoleCheck>
   );
 };
 
