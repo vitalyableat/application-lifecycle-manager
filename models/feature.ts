@@ -1,14 +1,14 @@
-import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, Schema } from 'mongoose';
 
 export interface IFeature {
   id: string;
-  projectId: ObjectId;
+  projectId: string;
   title: string;
-  description: string;
+  description?: string;
 }
 
 const featureSchema = new Schema<IFeature>({
-  projectId: { type: SchemaTypes.ObjectId, required: true, ref: 'Project' },
+  projectId: { type: String, required: true },
   title: { type: String, required: true },
   description: String,
 });

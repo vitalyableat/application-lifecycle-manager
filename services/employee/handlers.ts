@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 
 import { IEmployee } from '@/models/employee';
-import { getEmployeeById } from '@/services/employee/api';
+
+import { getEmployeeById } from './api';
 
 export const getEmployeeByIdHandler = async (id: string): Promise<IEmployee> => {
   try {

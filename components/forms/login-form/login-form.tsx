@@ -20,7 +20,7 @@ const LoginValidationSchema: ObjectSchema<LoginData> = object({
 export const LoginForm: FC = () => {
   const router = useRouter();
   const [login, isLoading] = useAuthStore((state) => [state.login, state.isLoading]);
-  const { handleSubmit, values, errors, handleChange } = useFormik<LoginData>({
+  const { handleSubmit, values, errors, handleChange, dirty } = useFormik<LoginData>({
     initialValues: { email: '', password: '' },
     validationSchema: LoginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -53,7 +53,7 @@ export const LoginForm: FC = () => {
         value={values.password}
         errorMessage={errors.password}
       />
-      <Button color="secondary" className="font-bold" type="submit">
+      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
         Login
       </Button>
       {isLoading && <Loader />}

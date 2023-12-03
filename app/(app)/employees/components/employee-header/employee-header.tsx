@@ -3,14 +3,13 @@ import { FC, useEffect, useMemo } from 'react';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
+import { WithRoleAccess } from '@/components/templates';
 import { ActionButton } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
-import useAuthStore from '@/services/auth';
 import useEmployeeStore from '@/services/employee';
 
 export const EmployeeHeader: FC = () => {
-  const user = useAuthStore((state) => state.user);
   const { employeeId } = useParams<{ employeeId?: string }>();
   const router = useRouter();
   const pathname = usePathname();
@@ -32,9 +31,10 @@ export const EmployeeHeader: FC = () => {
         </p>
       )}
 
-      {user?.role === EMPLOYEE_ROLE.RESOURCE_MANAGER && (
+      <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.RESOURCE_MANAGER]}>
         <ActionButton
           icon={shouldShowBack ? 'back' : employeeId ? 'edit' : 'create'}
+          routerBack={shouldShowBack}
           onClick={() =>
             router.push(
               employeeId
@@ -43,7 +43,7 @@ export const EmployeeHeader: FC = () => {
             )
           }
         />
-      )}
+      </WithRoleAccess>
     </div>
   );
 };
