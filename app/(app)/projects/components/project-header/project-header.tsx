@@ -1,5 +1,5 @@
 'use client';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
@@ -16,12 +16,6 @@ export const ProjectHeader: FC = () => {
   const shouldShowBack = pathname.includes('/create') || pathname.includes('edit');
   const [isLoading, projects] = useProjectStore((state) => [state.isLoading, state.projects]);
   const project = useMemo(() => projects.find(({ id }) => id === projectId), [projects, projectId]);
-
-  useEffect(() => {
-    if (projects.length && !project) {
-      router.push(APP_ROUTE.PROJECTS);
-    }
-  }, [projects]);
 
   return (
     <div className="w-full border-b-1 p-6 relative h-[72px]">

@@ -17,10 +17,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    verifyAccessToken(accessToken.value);
+    const { role, id } = verifyAccessToken(accessToken.value);
 
     await connectDB();
     const projects: IProject[] = await ProjectModel.find().sort('name');
+
+    if (role === EMPLOYEE_ROLE.DEVELOPER) {
+      return NextResponse.json(
+        projects.filter(({ employeeIds }) => employeeIds.includes(id)),
+        SERVER_STATUS[200],
+      );
+    }
 
     return NextResponse.json(projects, SERVER_STATUS[200]);
   } catch (e) {
