@@ -1,13 +1,18 @@
 import { ProjectForm } from '@/components/forms';
+import { RoleCheck } from '@/components/templates';
+import { APP_ROUTE } from '@/constants/app-route';
+import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 
 import { ShowLoader } from '../components';
 
 const ProjectCreatePage = () => {
   return (
-    <main className="p-6">
-      <ShowLoader />
-      <ProjectForm />
-    </main>
+    <RoleCheck role={EMPLOYEE_ROLE.PROJECT_MANAGER} redirect={APP_ROUTE.PROJECTS}>
+      <main className="p-6">
+        <ShowLoader />
+        <ProjectForm />
+      </main>
+    </RoleCheck>
   );
 };
 

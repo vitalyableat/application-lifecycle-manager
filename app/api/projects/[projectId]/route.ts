@@ -19,12 +19,12 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
   }
 
   try {
-    verifyAccessToken(accessToken.value);
+    const { role, id } = verifyAccessToken(accessToken.value);
 
     await connectDB();
     const project = await ProjectModel.findOne({ _id: params.projectId }).populate('employeeIds');
 
-    if (!project) {
+    if (!project || (role === EMPLOYEE_ROLE.DEVELOPER && !project?.employeeIds.includes(id))) {
       return NextResponse.json(null, SERVER_STATUS[404]);
     }
 

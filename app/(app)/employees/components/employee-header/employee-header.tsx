@@ -1,5 +1,5 @@
 'use client';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
@@ -16,12 +16,6 @@ export const EmployeeHeader: FC = () => {
   const shouldShowBack = pathname.includes('/create') || pathname.includes('edit');
   const [isLoading, employees] = useEmployeeStore((state) => [state.isLoading, state.employees]);
   const employee = useMemo(() => employees.find(({ id }) => id === employeeId), [employees, employeeId]);
-
-  useEffect(() => {
-    if (employees.length && !employee) {
-      router.push(APP_ROUTE.EMPLOYEES);
-    }
-  }, [employee]);
 
   return (
     <div className="w-full border-b-1 p-6 relative h-[72px]">
