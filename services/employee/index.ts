@@ -22,7 +22,6 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
     isLoading: false,
     getEmployees: async () => {
       set({ isLoading: true });
-
       try {
         const { data } = await getEmployees();
 
@@ -35,7 +34,6 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
     },
     addEmployee: async (employeePersonalData: EmployeePersonalData) => {
       set({ isLoading: true });
-
       try {
         const { data } = await addEmployee(employeePersonalData);
 
@@ -51,7 +49,6 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
     },
     updateEmployee: async (employeeUpdateData: Partial<IEmployee>) => {
       set({ isLoading: true });
-
       try {
         const { data } = await updateEmployee(employeeUpdateData);
 

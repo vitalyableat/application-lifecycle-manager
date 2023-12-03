@@ -1,28 +1,26 @@
-import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, Schema } from 'mongoose';
 
 import { TASK_STATUS } from '@/constants/task-status';
 
 export interface ITask {
   id: string;
-  featureId: ObjectId;
-  employeeId?: ObjectId;
+  featureId: string;
+  projectId: string;
+  employeeId?: string;
   title: string;
   description?: string;
   status: TASK_STATUS;
-  estimation?: number;
-  startDateTime?: Date;
-  spentHours?: number;
+  hoursEstimation?: string;
 }
 
 const taskSchema = new Schema<ITask>({
-  featureId: { type: SchemaTypes.ObjectId, required: true, ref: 'Feature' },
-  employeeId: { type: SchemaTypes.ObjectId, ref: 'Employee' },
+  featureId: { type: String, required: true },
+  projectId: { type: String, required: true },
+  employeeId: String,
   title: { type: String, required: true },
   description: String,
   status: { type: String, default: TASK_STATUS.TO_DO, enum: TASK_STATUS },
-  estimation: Number,
-  startDateTime: Date,
-  spentHours: Number,
+  hoursEstimation: String,
 });
 
 taskSchema.set('toJSON', {

@@ -5,7 +5,6 @@ export enum APP_ROUTE {
 
   PROFILE = '/profile', // user
   PROFILE_EDIT = '/profile/edit', // user
-  SETTINGS = '/settings', // user
 
   EMPLOYEES = '/employees',
   EMPLOYEE_DETAILS = '/employees/:employeeId',
@@ -14,7 +13,6 @@ export enum APP_ROUTE {
 
   PROJECTS = '/projects',
   PROJECT_CREATE = '/projects/create', // PM
-  PROJECT_REQUESTS = '/projects/requests', // RM
   PROJECT_DETAILS = '/projects/:projectId/details',
   PROJECT_DETAILS_EDIT = '/projects/:projectId/details/edit', // PM
   PROJECT_FEATURES = '/projects/:projectId/features', // CRUD - PM

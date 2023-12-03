@@ -1,7 +1,14 @@
-import { EmployeePersonalDataForm } from 'components/forms/employee-personal-data-form';
+import { EmployeePersonalDataForm } from '@/components/forms';
+
+import { ShowLoader } from '../components/';
 
 const UserCreatePage = () => {
-  return <EmployeePersonalDataForm />;
+  return (
+    <>
+      <ShowLoader />
+      <EmployeePersonalDataForm />
+    </>
+  );
 };
 
 export default UserCreatePage;

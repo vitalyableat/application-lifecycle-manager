@@ -122,7 +122,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
         />
       </div>
 
-      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-300" type="submit">
+      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
         Save
       </Button>
     </form>

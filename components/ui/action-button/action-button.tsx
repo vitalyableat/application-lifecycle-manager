@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 type Props = ButtonProps & {
   icon: 'create' | 'edit' | 'back';
+  routerBack?: boolean;
 };
 
 const Icons = {
@@ -15,16 +16,16 @@ const Icons = {
   back: <CloseIcon fontSize={24} />,
 };
 
-export const ActionButton: FC<Props> = ({ icon, onClick, ...props }) => {
+export const ActionButton: FC<Props> = ({ icon, routerBack, onClick, className, ...props }) => {
   const router = useRouter();
 
   return (
     <Button
-      className="absolute right-4 top-4"
+      className={`absolute right-4 top-4 ${className}`}
       isIconOnly
       color="secondary"
       variant="flat"
-      onClick={icon === 'back' ? router.back : onClick}
+      onClick={routerBack ? router.back : onClick}
       {...props}>
       {Icons[icon]}
     </Button>

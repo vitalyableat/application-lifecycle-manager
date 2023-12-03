@@ -25,7 +25,7 @@ export const ChangePasswordForm: FC = () => {
     state.isLoading,
     state.user,
   ]);
-  const { handleSubmit, values, errors, handleChange } = useFormik<ChangePasswordData>({
+  const { handleSubmit, values, errors, handleChange, dirty } = useFormik<ChangePasswordData>({
     initialValues: { oldPassword: '', newPassword: '' },
     validationSchema: ChangePasswordValidationSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -60,7 +60,7 @@ export const ChangePasswordForm: FC = () => {
           errorMessage={errors.newPassword}
         />
       </div>
-      <Button color="secondary" className="font-bold" type="submit">
+      <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
         Save
       </Button>
       {isLoading && <Loader />}

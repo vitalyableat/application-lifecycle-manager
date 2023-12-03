@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { EmployeeHeader } from './components/employee-header';
-import { EmployeeTabs } from './components/employee-tabs';
+import { EmployeeHeader, EmployeeTabs } from './components';
 
 const EmployeesLayout: FC<PropsWithChildren> = ({ children }) => {
   return (

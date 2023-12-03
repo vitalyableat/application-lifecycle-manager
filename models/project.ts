@@ -1,4 +1,4 @@
-import { model, models, ObjectId, Schema, SchemaTypes } from 'mongoose';
+import { model, models, Schema, SchemaTypes } from 'mongoose';
 
 import { PROJECT_STATUS } from '@/constants/project-status';
 
@@ -7,17 +7,13 @@ export interface IProject {
   name: string;
   description?: string;
   status: PROJECT_STATUS;
-  startDate: Date;
-  endDate?: Date;
-  employeeIds: ObjectId[];
+  employeeIds: string[];
 }
 
 const projectSchema = new Schema<IProject>({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   description: String,
-  status: { type: String, default: PROJECT_STATUS.PENDING_APPROVAL, enum: PROJECT_STATUS },
-  startDate: { type: Date, default: () => new Date() },
-  endDate: Date,
+  status: { type: String, required: true, enum: PROJECT_STATUS },
   employeeIds: [{ type: SchemaTypes.ObjectId, ref: 'Employee' }],
 });
 

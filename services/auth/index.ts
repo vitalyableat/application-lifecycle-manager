@@ -27,7 +27,6 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     isLoading: false,
     login: async (loginData: LoginData) => {
       set({ isLoading: true });
-
       try {
         const { data } = await login(loginData);
 
@@ -41,7 +40,6 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     },
     refreshUser: async () => {
       set({ isFirstRequest: true });
-
       try {
         const { data } = await refreshUser();
 
@@ -56,7 +54,6 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     },
     logout: async () => {
       set({ isLoading: true });
-
       try {
         await logout();
         set({ user: null, isLoading: false });
@@ -68,7 +65,6 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     },
     updateUser: async (userUpdateData: Partial<IEmployee>) => {
       set({ isLoading: true });
-
       try {
         const { data } = await updateUser(userUpdateData);
 
@@ -82,7 +78,6 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
     },
     changePassword: async (changePasswordData: ChangePasswordData & { id: string }) => {
       set({ isLoading: true });
-
       try {
         await changePassword(changePasswordData);
       } catch (e) {

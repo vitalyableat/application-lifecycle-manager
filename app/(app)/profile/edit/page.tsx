@@ -15,7 +15,7 @@ const ProfileEditPage = () => {
       <AvatarInput />
       {user && <EmployeePersonalDataForm employee={user} isProfile />}
       <ChangePasswordForm />
-      <ActionButton icon="back" />
+      <ActionButton icon="back" routerBack />
     </div>
   );
 };
