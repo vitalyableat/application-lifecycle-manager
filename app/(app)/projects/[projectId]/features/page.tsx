@@ -40,26 +40,30 @@ const ProjectFeaturesPage = () => {
   return (
     <main className="flex w-full h-full">
       {isLoading && <Loader />}
-      <div className="w-full flex flex-col p-6 gap-5">
-        <p className="text-xl font-bold text-center">Features</p>
-        <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER]}>
-          {isFormOpen ? (
-            <ActionButton icon="back" onClick={closeForm} />
-          ) : (
-            <ActionButton icon="create" onClick={openFormForCreate} />
-          )}
-        </WithRoleAccess>
-        {features.map((feature) => (
-          <div
-            key={feature.id}
-            className="flex flex-col gap-3 p-3 w-full rounded-md outline outline-default-200 relative">
-            <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER]}>
-              <ActionButton icon="edit" onClick={() => openFormForUpdate(feature)} className="top-2 right-2" />
-            </WithRoleAccess>
-            <p className="text-lg font-bold">{feature.title}</p>
-            <p className="text-md">{feature.description}</p>
-          </div>
-        ))}
+      <div className="w-full flex flex-col">
+        <div className={`${!isFormOpen && 'relative'} py-6 border-b-1`}>
+          <p className="text-xl font-bold text-center">Features</p>
+          <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER]}>
+            {isFormOpen ? (
+              <ActionButton icon="back" onClick={closeForm} />
+            ) : (
+              <ActionButton icon="create" onClick={openFormForCreate} />
+            )}
+          </WithRoleAccess>
+        </div>
+        <div className="w-full flex flex-col p-6 gap-5 overflow-y-auto">
+          {features.map((feature) => (
+            <div
+              key={feature.id}
+              className="flex flex-col gap-3 p-3 w-full rounded-md outline outline-default-200 relative">
+              <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER]}>
+                <ActionButton icon="edit" onClick={() => openFormForUpdate(feature)} className="top-2 right-2" />
+              </WithRoleAccess>
+              <p className="text-lg font-bold max-w-[calc(100%-48px)]">{feature.title}</p>
+              <p className="text-md whitespace-pre-wrap">{feature.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {isFormOpen && (

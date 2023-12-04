@@ -8,6 +8,7 @@ export interface IProject {
   description?: string;
   status: PROJECT_STATUS;
   employeeIds: string[];
+  startDate: Date;
 }
 
 const projectSchema = new Schema<IProject>({
@@ -15,6 +16,7 @@ const projectSchema = new Schema<IProject>({
   description: String,
   status: { type: String, required: true, enum: PROJECT_STATUS },
   employeeIds: [{ type: SchemaTypes.ObjectId, ref: 'Employee' }],
+  startDate: { type: Date, default: () => new Date() },
 });
 
 projectSchema.set('toJSON', {

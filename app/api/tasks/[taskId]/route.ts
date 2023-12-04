@@ -19,7 +19,9 @@ export async function GET(request: NextRequest, { params }: { params: { taskId: 
     verifyAccessToken(accessToken.value);
 
     await connectDB();
-    const tasks: ITask[] = await TaskModel.find({ projectId: params.taskId }).sort('title');
+    const tasks: ITask[] = await TaskModel.find({ projectId: params.taskId })
+      .sort('title')
+      .collation({ locale: 'en_US', numericOrdering: true });
 
     return NextResponse.json(tasks, SERVER_STATUS[200]);
   } catch (e) {

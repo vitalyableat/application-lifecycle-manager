@@ -9,6 +9,8 @@ export const UserPreview: FC = () => {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <User name={`${user?.name} ${user?.surname}`} description={user?.position} avatarProps={{ src: user?.avatar }} />
+    user && (
+      <User name={`${user.name} ${user.surname}`} description={user.position} avatarProps={{ src: user?.avatar }} />
+    )
   );
 };

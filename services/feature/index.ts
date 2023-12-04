@@ -5,6 +5,7 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
 import { IFeature } from '@/models/feature';
+import { numericCollationSort } from '@/utils/numeric-collation-sort';
 
 import { addFeature, deleteFeature, getProjectFeatures, updateFeature } from './api';
 import { CreateFeatureData } from './types';
@@ -39,7 +40,9 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
       try {
         const { data } = await addFeature(createFeatureData);
 
-        set((state) => ({ features: [...state.features, data].sort((a, b) => (a.title < b.title ? -1 : 1)) }));
+        set((state) => ({
+          features: [...state.features, data].sort((a, b) => numericCollationSort(a.title, b.title)),
+        }));
       } catch (e) {
         toast.error((e as AxiosResponse).request.statusText);
       } finally {

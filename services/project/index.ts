@@ -5,6 +5,7 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
 import { IProject } from '@/models/project';
+import { numericCollationSort } from '@/utils/numeric-collation-sort';
 
 import { addProject, deleteProject, getProjects, updateProject } from './api';
 import { CreateProjectData } from './types';
@@ -39,7 +40,7 @@ const useProjectStore = createWithEqualityFn<ProjectState>()(
       try {
         const { data } = await addProject(createProjectData);
 
-        set((state) => ({ projects: [...state.projects, data].sort((a, b) => (a.name < b.name ? -1 : 1)) }));
+        set((state) => ({ projects: [...state.projects, data].sort((a, b) => numericCollationSort(a.name, b.name)) }));
 
         return data;
       } catch (e) {

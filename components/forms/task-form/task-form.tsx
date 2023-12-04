@@ -64,18 +64,17 @@ export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSe
   });
 
   useEffect(() => {
-    task &&
-      resetForm({
-        values: {
-          featureId: task.featureId,
-          projectId: project.id,
-          employeeId: task?.employeeId || '',
-          title: task.title,
-          description: task?.description || '',
-          status: task.status,
-          hoursEstimation: task?.hoursEstimation || '',
-        },
-      });
+    resetForm({
+      values: {
+        featureId: task?.featureId || featureId,
+        projectId: project.id,
+        employeeId: task?.employeeId || '',
+        title: task?.title || '',
+        description: task?.description || '',
+        status: task?.status || TASK_STATUS.TO_DO,
+        hoursEstimation: task?.hoursEstimation || '',
+      },
+    });
   }, [task]);
 
   const onTaskDelete = async () => {

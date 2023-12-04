@@ -27,7 +27,7 @@ export const ProjectTabs: FC = () => {
   }, []);
 
   return (
-    <div className="relative min-w-[200px] w-80 border-r-1">
+    <div className="relative min-w-[200px] w-[200px] border-r-1">
       {isLoading && <Loader />}
       <div className="px-2 py-4">
         <Search />

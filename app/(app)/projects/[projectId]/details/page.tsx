@@ -13,7 +13,7 @@ const ProjectDetailsPage = async ({ params }: { params: { projectId: string } })
           {project.status}
         </p>
         {project.description && (
-          <p className="text-md">
+          <p className="text-md whitespace-pre-wrap">
             <b>Description: </b>
             {project.description}
           </p>

@@ -25,7 +25,7 @@ export const TaskItem: FC<Props> = ({ task, project, closeTaskDetails, featureId
   const assignee = useMemo(() => project.employees.find(({ id }) => id === task?.employeeId), [task, project]);
 
   return (
-    <div className="h-full w-1/3 min-w-[400px] border-l-1 flex flex-col">
+    <div className="h-full w-1/3 min-w-[320px] max-w-[560px] border-l-1 flex flex-col">
       <div className="border-b-1 p-6 relative">
         <p className="font-bold h-6 max-w-[calc(100%-88px)] txt-overflow">{task?.title}</p>
         <ActionButton icon="back" onClick={task && isFormOpen ? closeForm : closeTaskDetails} />

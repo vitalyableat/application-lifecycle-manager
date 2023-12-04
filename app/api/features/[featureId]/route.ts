@@ -20,7 +20,9 @@ export async function GET(request: NextRequest, { params }: { params: { featureI
     verifyAccessToken(accessToken.value);
 
     await connectDB();
-    const features: IFeature[] = await FeatureModel.find({ projectId: params.featureId }).sort('title');
+    const features: IFeature[] = await FeatureModel.find({ projectId: params.featureId })
+      .sort('title')
+      .collation({ locale: 'en_US', numericOrdering: true });
 
     return NextResponse.json(features, SERVER_STATUS[200]);
   } catch (e) {

@@ -32,7 +32,7 @@ const employeeSchema = new Schema<IEmployeeWithPassword>({
   startDate: { type: Date, default: () => new Date() },
   position: { type: String, default: '' },
   role: { type: String, default: EMPLOYEE_ROLE.DEVELOPER, enum: EMPLOYEE_ROLE },
-  level: { type: String, default: EMPLOYEE_LEVEL.JUNIOR, enum: EMPLOYEE_LEVEL },
+  level: { type: String, default: EMPLOYEE_LEVEL.TRAINEE, enum: EMPLOYEE_LEVEL },
   active: { type: Boolean, default: true },
   free: { type: Boolean, default: true },
   avatar: String,
