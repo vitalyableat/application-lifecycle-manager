@@ -26,7 +26,11 @@ const ProjectTimelinePage: FC<Props> = ({ params }) => {
 
   return (
     <main className="flex w-full overflow-y-auto min-h-[calc(100vh-184px)]">
-      <Timeline selectedTask={selectedTask} openTaskDetails={openTaskDetails} />
+      <Timeline
+        projectStartDate={params.project.startDate}
+        selectedTask={selectedTask}
+        openTaskDetails={openTaskDetails}
+      />
       {(featureId || selectedTask) && (
         <TaskItem
           task={selectedTask}

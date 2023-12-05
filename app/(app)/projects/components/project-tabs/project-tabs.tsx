@@ -1,5 +1,5 @@
 'use client';
-import { FC, Key, useEffect } from 'react';
+import { FC, Key, useEffect, useMemo, useState } from 'react';
 
 import { Accordion, AccordionItem, Listbox, ListboxItem } from '@nextui-org/react';
 import { Search } from 'components/ui/search';
@@ -16,6 +16,7 @@ export const ProjectTabs: FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { projectId } = useParams<{ projectId?: string }>();
+  const [search, setSearch] = useState('');
   const [projects, isLoading, getProjects] = useProjectStore((state) => [
     state.projects,
     state.isLoading,
@@ -26,18 +27,23 @@ export const ProjectTabs: FC = () => {
     getProjects();
   }, []);
 
+  const filteredProjects = useMemo(
+    () => projects.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase())),
+    [search, projects],
+  );
+
   return (
     <div className="relative min-w-[200px] w-[200px] border-r-1">
       {isLoading && <Loader />}
       <div className="px-2 py-4">
-        <Search />
+        <Search value={search} onChange={setSearch} />
       </div>
       <Accordion
         itemClasses={AccordionItemClasses}
         showDivider={false}
         className="p-0 overflow-auto h-[calc(100vh-184px)] max-h-[calc(100vh-184px)]"
         defaultSelectedKeys={[projectId] as Iterable<Key>}>
-        {projects.map(({ name, id }) => (
+        {filteredProjects.map(({ name, id }) => (
           <AccordionItem key={id} title={name}>
             <Listbox
               onAction={(key) => router.push((key as APP_ROUTE).replace(':projectId', id))}

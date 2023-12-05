@@ -8,7 +8,7 @@ import { ShowLoader } from '../components';
 const ProjectCreatePage = () => {
   return (
     <RoleCheck role={EMPLOYEE_ROLE.PROJECT_MANAGER} redirect={APP_ROUTE.PROJECTS}>
-      <main className="p-6">
+      <main className="p-6 overflow-y-auto">
         <ShowLoader />
         <ProjectForm />
       </main>

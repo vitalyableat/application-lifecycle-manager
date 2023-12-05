@@ -55,7 +55,11 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
       try {
         const { data } = await updateTask(task);
 
-        set((state) => ({ tasks: state.tasks.map((task) => (task.id === data.id ? data : task)) }));
+        set((state) => ({
+          tasks: state.tasks
+            .map((task) => (task.id === data.id ? data : task))
+            .sort((a, b) => numericCollationSort(a.title, b.title)),
+        }));
 
         return data;
       } catch (e) {

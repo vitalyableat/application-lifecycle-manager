@@ -54,7 +54,11 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
       try {
         const { data } = await updateFeature(feature);
 
-        set((state) => ({ features: state.features.map((feature) => (feature.id === data.id ? data : feature)) }));
+        set((state) => ({
+          features: state.features
+            .map((feature) => (feature.id === data.id ? data : feature))
+            .sort((a, b) => numericCollationSort(a.title, b.title)),
+        }));
       } catch (e) {
         toast.error((e as AxiosResponse).request.statusText);
       } finally {

@@ -37,7 +37,11 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
       try {
         const { data } = await addEmployee(employeePersonalData);
 
-        set((state) => ({ employees: [...state.employees, data] }));
+        set((state) => ({
+          employees: [...state.employees, data].sort((a, b) =>
+            a.name + ' ' + a.surname < b.name + ' ' + b.surname ? -1 : 1,
+          ),
+        }));
 
         return data;
       } catch (e) {
@@ -52,7 +56,11 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
       try {
         const { data } = await updateEmployee(employeeUpdateData);
 
-        set((state) => ({ employees: state.employees.map((employee) => (employee.id === data.id ? data : employee)) }));
+        set((state) => ({
+          employees: state.employees
+            .map((employee) => (employee.id === data.id ? data : employee))
+            .sort((a, b) => (a.name + ' ' + a.surname < b.name + ' ' + b.surname ? -1 : 1)),
+        }));
 
         return data;
       } catch (e) {

@@ -1,5 +1,5 @@
 'use client';
-import { FC, Key, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { CloseIcon } from '@nextui-org/shared-icons';
@@ -10,15 +10,17 @@ import { ITask } from '@/models/task';
 import useFeatureStore from '@/services/feature';
 import useTaskStore from '@/services/task';
 import useTimeRecordStore from '@/services/time-record';
+import { getDateArray } from '@/utils/get-date-array';
 
 import { AccordionItemClasses } from './styles';
 
 type Props = {
+  projectStartDate: Date;
   selectedTask?: ITask;
   openTaskDetails: (featureId: string, task?: ITask) => void;
 };
 
-export const Timeline: FC<Props> = ({ selectedTask, openTaskDetails }) => {
+export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDetails }) => {
   const [selectedFeatureId, setSelectedFeatureId] = useState('');
   const features = useFeatureStore((state) => state.features);
   const tasks = useTaskStore((state) => state.tasks);
@@ -33,7 +35,7 @@ export const Timeline: FC<Props> = ({ selectedTask, openTaskDetails }) => {
       })),
     [features, tasks, timeRecords],
   );
-  // const dateArray = getDateArray(new Date(params.project.startDate));
+  // const dateArray = getDateArray(new Date(projectStartDate));
   const dateArray = ['2023-11-29', '2023-11-30', '2023-12-01', '2023-12-02', '2023-12-03', '2023-12-04'];
   const lines: { height: string }[] = useMemo(
     () =>
@@ -83,7 +85,7 @@ export const Timeline: FC<Props> = ({ selectedTask, openTaskDetails }) => {
       </div>
       <div className="h-fit min-h-full flex w-full overflow-x-auto">
         {dateArray.map((date) => (
-          <div key={date} className="h-fit min-h-full min-w-[180px] border-r-1">
+          <div key={date} className="h-fit min-w-[180px] border-r-1">
             <p className="font-bold text-medium py-3 px-2 text-center border-b-1">{date}</p>
             {lines.map((line, index) => (
               <div key={index} className={`${line.height} border-b-1`}></div>

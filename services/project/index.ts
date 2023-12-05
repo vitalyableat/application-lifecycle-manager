@@ -55,7 +55,11 @@ const useProjectStore = createWithEqualityFn<ProjectState>()(
       try {
         const { data } = await updateProject(project);
 
-        set((state) => ({ projects: state.projects.map((project) => (project.id === data.id ? data : project)) }));
+        set((state) => ({
+          projects: state.projects
+            .map((project) => (project.id === data.id ? data : project))
+            .sort((a, b) => numericCollationSort(a.name, b.name)),
+        }));
 
         return data;
       } catch (e) {

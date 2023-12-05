@@ -13,7 +13,7 @@ const ProjectDetailsEditPage = async ({ params }: { params: { projectId: string 
     <RoleCheck
       role={EMPLOYEE_ROLE.PROJECT_MANAGER}
       redirect={APP_ROUTE.PROJECT_DETAILS.replace(':projectId', params.projectId) as APP_ROUTE}>
-      <main className="flex flex-col p-6">
+      <main className="flex flex-col p-6 overflow-y-auto">
         <ShowLoader />
         <ProjectForm project={project} />
       </main>

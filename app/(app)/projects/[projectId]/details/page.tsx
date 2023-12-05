@@ -5,7 +5,7 @@ const ProjectDetailsPage = async ({ params }: { params: { projectId: string } })
   const project = await getProjectByIdHandler(params.projectId);
 
   return (
-    <main className="flex flex-col gap-5 p-6">
+    <main className="flex flex-col gap-5 p-6 overflow-y-auto">
       <p className="text-xl font-bold text-center">Project Details</p>
       <div className="flex flex-col">
         <p className="text-md">
