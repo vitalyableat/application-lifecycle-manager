@@ -23,8 +23,9 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
 
     await connectDB();
     const project = await ProjectModel.findOne({ _id: params.projectId }).populate('employeeIds');
+    const employeeIds = project?.employeeIds.map(({ id }: { id: string }) => id);
 
-    if (!project || (role === EMPLOYEE_ROLE.DEVELOPER && !project?.employeeIds.includes(id))) {
+    if (!project || (role === EMPLOYEE_ROLE.DEVELOPER && !employeeIds.includes(id))) {
       return NextResponse.json(null, SERVER_STATUS[404]);
     }
 
@@ -34,7 +35,8 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
         name: project.name,
         status: project.status,
         description: project.description,
-        employeeIds: project.employeeIds.map(({ id }: { id: string }) => id),
+        startDate: project.startDate,
+        employeeIds,
         employees: project.employeeIds,
       },
       SERVER_STATUS[200],

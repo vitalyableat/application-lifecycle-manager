@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
     verifyAccessToken(accessToken.value);
 
     await connectDB();
-    const employees: IEmployee[] = await EmployeeModel.find({ role: EMPLOYEE_ROLE.DEVELOPER });
+    const employees: IEmployee[] = await EmployeeModel.find({ role: EMPLOYEE_ROLE.DEVELOPER }).sort({
+      name: 1,
+      surname: 1,
+    });
 
     return NextResponse.json(employees, SERVER_STATUS[200]);
   } catch (e) {

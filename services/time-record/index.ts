@@ -56,7 +56,9 @@ const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
         const { data } = await updateTimeRecord(timeRecord);
 
         set((state) => ({
-          timeRecords: state.timeRecords.map((timeRecord) => (timeRecord.id === data.id ? data : timeRecord)),
+          timeRecords: state.timeRecords
+            .map((timeRecord) => (timeRecord.id === data.id ? data : timeRecord))
+            .sort((a, b) => (a.date === b.date ? (a.time > b.time ? -1 : 1) : a.date > b.date ? -1 : 1)),
         }));
       } catch (e) {
         toast.error((e as AxiosResponse).request.statusText);

@@ -5,6 +5,7 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
 import { ITask } from '@/models/task';
+import { numericCollationSort } from '@/utils/numeric-collation-sort';
 
 import { addTask, deleteTask, getProjectTasks, updateTask } from './api';
 import { CreateTaskData } from './types';
@@ -39,7 +40,7 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
       try {
         const { data } = await addTask(createTaskData);
 
-        set((state) => ({ tasks: [...state.tasks, data].sort((a, b) => (a.title < b.title ? -1 : 1)) }));
+        set((state) => ({ tasks: [...state.tasks, data].sort((a, b) => numericCollationSort(a.title, b.title)) }));
 
         return data;
       } catch (e) {
@@ -54,7 +55,11 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
       try {
         const { data } = await updateTask(task);
 
-        set((state) => ({ tasks: state.tasks.map((task) => (task.id === data.id ? data : task)) }));
+        set((state) => ({
+          tasks: state.tasks
+            .map((task) => (task.id === data.id ? data : task))
+            .sort((a, b) => numericCollationSort(a.title, b.title)),
+        }));
 
         return data;
       } catch (e) {

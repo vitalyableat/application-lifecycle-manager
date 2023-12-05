@@ -30,7 +30,6 @@ export const ChangePasswordForm: FC = () => {
     validationSchema: ChangePasswordValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log(values);
         await changePassword({ ...values, id: user?.id as string });
         toast.success('Password was successfully updated!');
         router.push(APP_ROUTE.PROFILE);

@@ -10,21 +10,21 @@ import { APP_ROUTE } from '@/constants/app-route';
 import useEmployeeStore from '@/services/employee';
 
 export const EmployeeTabs: FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [search, setSearch] = useState('');
   const [isLoading, employees, getEmployees] = useEmployeeStore((state) => [
     state.isLoading,
     state.employees,
     state.getEmployees,
   ]);
-  const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     getEmployees();
   }, []);
 
   const filteredEmployees = useMemo(
-    () => employees.filter(({ name, surname }) => (name + ' ' + surname).toUpperCase().includes(search.toUpperCase())),
+    () => employees.filter(({ name, surname }) => (name + ' ' + surname).toLowerCase().includes(search.toLowerCase())),
     [search, employees],
   );
 

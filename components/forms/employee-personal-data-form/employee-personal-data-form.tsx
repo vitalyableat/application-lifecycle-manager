@@ -119,6 +119,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
           isInvalid={!!errors.birthDate}
           variant="bordered"
           className="max-w-xs"
+          max={new Date().toISOString().split('T')[0]}
         />
       </div>
 

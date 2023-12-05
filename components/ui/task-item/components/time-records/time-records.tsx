@@ -59,7 +59,7 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
           taskId={task.id}
           timeRecord={selectedTimeRecord}
           featureId={featureId}
-          projectId={project.id}
+          project={project}
           closeForm={closeForm}
         />
       ) : (

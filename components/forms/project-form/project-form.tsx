@@ -43,7 +43,9 @@ export const ProjectForm: FC<Props> = ({ project }) => {
     validationSchema: ProjectValidationSchema,
     onSubmit: async (values, { setFieldValue }) => {
       try {
-        const { id } = project ? await updateProject({ ...values, id: project.id }) : await addProject(values);
+        const { id } = project
+          ? await updateProject({ ...values, id: project.id, startDate: project.startDate })
+          : await addProject(values);
 
         router.push(APP_ROUTE.PROJECT_DETAILS.replace(':projectId', id));
         router.refresh();

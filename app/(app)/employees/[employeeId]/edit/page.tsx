@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { EmployeePersonalDataForm, EmployeeWorkingDataForm } from '@/components/forms';
-import { RoleCheck } from '@/components/templates';
+import { RoleCheck } from '@/components/wrappers';
 import { APP_ROUTE } from '@/constants/app-route';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 import { getEmployeeByIdHandler } from '@/services/employee/handlers';

@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { ProjectDataPreloader } from '@/components/templates';
+import { ProjectDataPreloader } from '@/components/wrappers';
 import { getProjectByIdHandler } from '@/services/project/handlers';
 import { ProjectWithEmployees } from '@/services/project/types';
 

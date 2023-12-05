@@ -16,7 +16,7 @@ export const TaskPreview: FC<Props> = ({ task, assignee }) => {
         {task?.status}
       </p>
       {task?.description && (
-        <p className="text-md">
+        <p className="text-md whitespace-pre-wrap">
           <b>Description: </b>
           {task.description}
         </p>

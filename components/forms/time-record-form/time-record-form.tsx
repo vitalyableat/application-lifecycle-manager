@@ -8,6 +8,7 @@ import { object, ObjectSchema, string } from 'yup';
 import { NumberInput } from '@/components/ui';
 import { ITimeRecord } from '@/models/time-record';
 import useAuthStore from '@/services/auth';
+import { ProjectWithEmployees } from '@/services/project/types';
 import useTimeRecordStore from '@/services/time-record';
 import { CreateTimeRecordData } from '@/services/time-record/types';
 
@@ -24,12 +25,12 @@ const TimeRecordValidationSchema: ObjectSchema<CreateTimeRecordData> = object({
 type Props = {
   taskId: string;
   featureId: string;
-  projectId: string;
+  project: ProjectWithEmployees;
   timeRecord?: ITimeRecord;
   closeForm: () => void;
 };
 
-export const TimeRecordForm: FC<Props> = ({ taskId, featureId, projectId, timeRecord, closeForm }) => {
+export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeRecord, closeForm }) => {
   const user = useAuthStore((state) => state.user);
   const [addTimeRecord, updateTimeRecord, deleteTimeRecord] = useTimeRecordStore((state) => [
     state.addTimeRecord,
@@ -40,7 +41,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, projectId, timeRe
     initialValues: {
       taskId: timeRecord?.taskId || taskId,
       featureId: timeRecord?.featureId || featureId,
-      projectId: timeRecord?.projectId || projectId,
+      projectId: timeRecord?.projectId || project.id,
       employeeId: timeRecord?.employeeId || user?.id || '',
       hoursSpent: timeRecord?.hoursSpent || '',
       date: timeRecord?.date || new Date().toISOString().split('T')[0],
@@ -101,6 +102,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, projectId, timeRe
         isInvalid={!!errors.date}
         variant="bordered"
         max={new Date().toISOString().split('T')[0]}
+        min={new Date(project.startDate).toISOString().split('T')[0]}
       />
       <Input
         classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
