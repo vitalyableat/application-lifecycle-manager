@@ -1,5 +1,5 @@
 'use client';
-import { FC, useMemo, useState } from 'react';
+import { FC, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { CloseIcon } from '@nextui-org/shared-icons';
@@ -21,10 +21,19 @@ type Props = {
 };
 
 export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDetails }) => {
+  const timelineRef = useRef<HTMLDivElement>(null);
   const [selectedFeatureId, setSelectedFeatureId] = useState('');
   const features = useFeatureStore((state) => state.features);
   const tasks = useTaskStore((state) => state.tasks);
   const timeRecords = useTimeRecordStore((state) => state.timeRecords);
+  const dateArray = getDateArray(new Date(projectStartDate));
+  const projectStartTime = new Date(projectStartDate).setHours(0, 0, 0, 0);
+  const currentTimeLineLeft = ((new Date().getTime() - projectStartTime) * 180) / 86400000;
+
+  useLayoutEffect(() => {
+    timelineRef.current?.scroll({ left: dateArray.length * 180 });
+  }, []);
+
   const data = useMemo(
     () =>
       features.map((feature) => ({
@@ -35,17 +44,58 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
       })),
     [features, tasks, timeRecords],
   );
-  // const dateArray = getDateArray(new Date(projectStartDate));
-  const dateArray = ['2023-11-29', '2023-11-30', '2023-12-01', '2023-12-02', '2023-12-03', '2023-12-04'];
-  const lines: { height: string }[] = useMemo(
+  const tracks: { left: number; width: number; height: number; top: number }[] = useMemo(
     () =>
-      data.reduce(
-        (res, f) =>
-          f.id === selectedFeatureId
-            ? [...res, { height: 'h-12' }, { height: 'h-9' }, ...f.tasks.map(() => ({ height: 'h-9' }))]
-            : [...res, { height: 'h-12' }],
-        [] as { height: string }[],
-      ),
+      data
+        .reduce(
+          (res, f) => {
+            const featureTaskTracks = f.tasks.map(({ timeRecords }) =>
+              timeRecords.reduce(
+                (res, c) => {
+                  const date = new Date(c.date + 'T' + c.time);
+                  const start = (date.getTime() - projectStartTime) / 1000;
+                  const end =
+                    (new Date(date.getTime() + +c.hoursSpent * 3600 * 1000).getTime() - projectStartTime) / 1000;
+
+                  if (res.start === -1 || res.start > start) {
+                    res.start = start;
+                  }
+                  if (res.end === -1 || res.end < end) {
+                    res.end = end;
+                  }
+
+                  return res;
+                },
+                { start: -1, end: -1, height: 36 },
+              ),
+            );
+            const featureTrack = featureTaskTracks.reduce(
+              (res, c) => ({
+                start: res.start === -1 || res.start > c.start ? c.start : res.start,
+                end: res.end === -1 || res.end < c.end ? c.end : res.end,
+                height: 48,
+              }),
+              { start: -1, end: -1, height: 48 },
+            );
+
+            return f.id === selectedFeatureId
+              ? [...res, featureTrack, { start: -1, end: -1, height: 36 }, ...featureTaskTracks]
+              : [...res, featureTrack];
+          },
+          [] as { start: number; end: number; height: number }[],
+        )
+        .reduce(
+          (res, { start, end, height }) => [
+            ...res,
+            {
+              left: start === -1 ? 0 : (start * 180) / 86400,
+              width: start === -1 ? 0 : ((end - start) * 180) / 86400,
+              height,
+              top: (res[res.length - 1]?.top || 48) + (res[res.length - 1]?.height || 0),
+            },
+          ],
+          [] as { left: number; width: number; height: number; top: number }[],
+        ),
     [data, selectedFeatureId],
   );
 
@@ -59,7 +109,7 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
               key={feature.id}
               textValue={feature.title}
               title={<p className="txt-overflow">{feature.title}</p>}
-              onClick={() => setSelectedFeatureId((c) => (c === feature.id ? '' : feature.id))}>
+              onPress={() => setSelectedFeatureId((c) => (c === feature.id ? '' : feature.id))}>
               <div className="flex flex-col">
                 <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.DEVELOPER, EMPLOYEE_ROLE.PROJECT_MANAGER]}>
                   <div
@@ -83,15 +133,26 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
           ))}
         </Accordion>
       </div>
-      <div className="h-fit min-h-full flex w-full overflow-x-auto">
+      <div ref={timelineRef} className="h-fit min-h-full flex w-full overflow-x-auto relative">
         {dateArray.map((date) => (
           <div key={date} className="h-fit min-w-[180px] border-r-1">
             <p className="font-bold text-medium py-3 px-2 text-center border-b-1">{date}</p>
-            {lines.map((line, index) => (
-              <div key={index} className={`${line.height} border-b-1`}></div>
+            {tracks.map(({ height }, index) => (
+              <div key={index} className="border-b-1" style={{ height }} />
             ))}
           </div>
         ))}
+        {tracks.map(({ left, width, height, top }, index) => (
+          <div
+            key={index}
+            className={`absolute rounded-md ${width && 'border-2 border-secondary-200'} bg-secondary-100`}
+            style={{ left, width, height, top }}
+          />
+        ))}
+        <div
+          className="h-[calc(100%-48px)] border-1 border-secondary-500 absolute top-12"
+          style={{ left: currentTimeLineLeft }}
+        />
       </div>
     </div>
   );
