@@ -25,13 +25,23 @@ const TaskValidationSchema: ObjectSchema<CreateTaskData> = object({
 
 type Props = {
   task?: ITask;
+  defaultStatus?: TASK_STATUS;
   closeForm: () => void;
   project: ProjectWithEmployees;
   featureId: string;
   setSelectedTask: Dispatch<SetStateAction<ITask | undefined>>;
+  closeTaskDetails: () => void;
 };
 
-export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSelectedTask }) => {
+export const TaskForm: FC<Props> = ({
+  task,
+  defaultStatus,
+  closeForm,
+  project,
+  featureId,
+  setSelectedTask,
+  closeTaskDetails,
+}) => {
   const [addTask, updateTask, deleteTask] = useTaskStore((state) => [
     state.addTask,
     state.updateTask,
@@ -44,7 +54,7 @@ export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSe
       employeeId: task?.employeeId || '',
       title: task?.title || '',
       description: task?.description || '',
-      status: task?.status || TASK_STATUS.TO_DO,
+      status: task?.status || defaultStatus || TASK_STATUS.TO_DO,
       hoursEstimation: task?.hoursEstimation || '',
     },
     validationSchema: TaskValidationSchema,
@@ -71,16 +81,17 @@ export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSe
         employeeId: task?.employeeId || '',
         title: task?.title || '',
         description: task?.description || '',
-        status: task?.status || TASK_STATUS.TO_DO,
+        status: task?.status || defaultStatus || TASK_STATUS.TO_DO,
         hoursEstimation: task?.hoursEstimation || '',
       },
     });
-  }, [task]);
+  }, [task, defaultStatus, featureId]);
 
   const onTaskDelete = async () => {
     if (task) {
       await deleteTask(task.id);
-      closeForm();
+      setSelectedTask(undefined);
+      closeTaskDetails();
     }
   };
 
@@ -117,9 +128,8 @@ export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSe
       <Select
         label="Status"
         name="status"
-        defaultSelectedKeys={[values.status]}
+        selectedKeys={[values.status]}
         onChange={handleChange}
-        value={values.status}
         errorMessage={errors.status}
         variant="bordered">
         {Object.values(TASK_STATUS).map((status) => (
@@ -133,7 +143,6 @@ export const TaskForm: FC<Props> = ({ task, closeForm, project, featureId, setSe
         name="employeeId"
         defaultSelectedKeys={values?.employeeId && [values.employeeId]}
         onChange={handleChange}
-        value={values.employeeId}
         errorMessage={errors.employeeId}
         variant="bordered">
         {project.employees.map(({ id, name, surname, position, level }) => (

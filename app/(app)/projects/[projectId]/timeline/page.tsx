@@ -1,10 +1,11 @@
 'use client';
 import { FC, useState } from 'react';
 
-import { Timeline } from '@/app/(app)/projects/[projectId]/timeline/components';
 import { TaskItem } from '@/components/ui';
 import { ITask } from '@/models/task';
 import { ProjectWithEmployees } from '@/services/project/types';
+
+import { Timeline } from './components';
 
 type Props = {
   params: { projectId: string; project: ProjectWithEmployees };

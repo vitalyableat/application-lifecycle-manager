@@ -50,14 +50,12 @@ export const ProjectTabs: FC = () => {
               variant="flat"
               className="px-0 py-2"
               aria-label="Project Listbox"
-              color="secondary">
+              itemClasses={{ base: 'data-[hover=true]:bg-secondary-100' }}>
               {PROJECT_LISTBOX.map(({ key, title, Icon }) => (
                 <ListboxItem
                   key={key}
                   startContent={Icon}
-                  className={`${
-                    pathname === key.replace(':projectId', id) && 'bg-secondary-200 data-[hover=true]:bg-secondary-100'
-                  }`}>
+                  className={`${pathname === key.replace(':projectId', id) && 'bg-secondary-200'}`}>
                   {title}
                 </ListboxItem>
               ))}

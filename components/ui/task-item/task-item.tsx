@@ -5,6 +5,7 @@ import { TaskForm } from '@/components/forms';
 import { WithRoleAccess } from '@/components/templates';
 import { ActionButton } from '@/components/ui';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { TASK_STATUS } from '@/constants/task-status';
 import { ITask } from '@/models/task';
 import { ProjectWithEmployees } from '@/services/project/types';
 
@@ -12,13 +13,14 @@ import { TaskPreview, TimeRecords } from './components';
 
 type Props = {
   task?: ITask;
+  defaultStatus?: TASK_STATUS;
   closeTaskDetails: () => void;
   project: ProjectWithEmployees;
   featureId: string;
   setSelectedTask: Dispatch<SetStateAction<ITask | undefined>>;
 };
 
-export const TaskItem: FC<Props> = ({ task, project, closeTaskDetails, featureId, setSelectedTask }) => {
+export const TaskItem: FC<Props> = ({ task, defaultStatus, project, closeTaskDetails, featureId, setSelectedTask }) => {
   const [isFormOpen, setIsFormOpen] = useState(!task);
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
@@ -44,10 +46,12 @@ export const TaskItem: FC<Props> = ({ task, project, closeTaskDetails, featureId
         ) : (
           <TaskForm
             task={task}
+            defaultStatus={defaultStatus}
             closeForm={closeForm}
             project={project}
             featureId={featureId}
             setSelectedTask={setSelectedTask}
+            closeTaskDetails={closeTaskDetails}
           />
         )}
       </div>
