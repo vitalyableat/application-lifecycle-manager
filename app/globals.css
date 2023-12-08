@@ -49,6 +49,14 @@ input[type="search"]::-webkit-search-results-decoration {
     white-space: normal;
 }
 
+.txt-overflow-3 {
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: normal;
+}
+
 .form-fields {
     width: 100%;
     display: flex;

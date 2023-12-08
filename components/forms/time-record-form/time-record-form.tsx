@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import { object, ObjectSchema, string } from 'yup';
 
 import { NumberInput } from '@/components/ui';
+import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 import { ITimeRecord } from '@/models/time-record';
 import useAuthStore from '@/services/auth';
 import { ProjectWithEmployees } from '@/services/project/types';
@@ -90,6 +91,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
         value={values.hoursSpent}
         errorMessage={errors.hoursSpent}
         isInvalid={!!errors.hoursSpent}
+        disabled={user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER}
       />
       <Input
         classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
@@ -103,6 +105,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
         variant="bordered"
         max={new Date().toISOString().split('T')[0]}
         min={new Date(project.startDate).toISOString().split('T')[0]}
+        disabled={user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER}
       />
       <Input
         classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
@@ -114,6 +117,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
         errorMessage={errors.time}
         isInvalid={!!errors.time}
         variant="bordered"
+        disabled={user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER}
       />
 
       <div className={`flex w-full ${timeRecord ? 'justify-end' : 'justify-center'} gap-5`}>

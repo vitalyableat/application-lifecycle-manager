@@ -68,7 +68,7 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
           <div className="flex flex-col mt-5">
             {taskTimeRecords.map((timeRecord) => (
               <div key={timeRecord.id} className="flex flex-col border p-2 relative">
-                {user?.id === timeRecord.employeeId && (
+                {(user?.id === timeRecord.employeeId || user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER) && (
                   <ActionButton
                     icon="edit"
                     onClick={() => setSelectedTimeRecord(timeRecord)}
@@ -78,7 +78,14 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
                 <span className="text-sm">
                   {dateToString(timeRecord.date)} {timeRecord.time}
                 </span>
-                <div className={`txt-overflow w-[${user?.id === timeRecord.employeeId ? 'calc(100%-48px)' : '100%'}]`}>
+                <div
+                  className="txt-overflow"
+                  style={{
+                    width:
+                      user?.id === timeRecord.employeeId || user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER
+                        ? 'calc(100% - 48px)'
+                        : '100%',
+                  }}>
                   <b>{timeRecord.hoursSpent}h</b> {getEmployeeFullName(timeRecord.employeeId)}
                 </div>
               </div>

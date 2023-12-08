@@ -39,14 +39,14 @@ export async function DELETE(request: NextRequest, { params }: { params: { timeR
   try {
     const { role, id } = verifyAccessToken(accessToken.value);
 
-    if (role !== EMPLOYEE_ROLE.DEVELOPER) {
+    if (role !== EMPLOYEE_ROLE.DEVELOPER && role !== EMPLOYEE_ROLE.PROJECT_MANAGER) {
       return NextResponse.json(null, SERVER_STATUS[403]);
     }
 
     await connectDB();
     const tr = await TimeRecordModel.findById(params.timeRecordId);
 
-    if (tr.employeeId !== id) {
+    if (tr.employeeId !== id && role !== EMPLOYEE_ROLE.PROJECT_MANAGER) {
       return NextResponse.json(null, SERVER_STATUS[403]);
     }
 
