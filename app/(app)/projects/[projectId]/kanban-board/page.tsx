@@ -32,8 +32,8 @@ const ProjectKanbanBoardPage: FC<Props> = ({ params }) => {
   };
 
   return (
-    <main className="flex w-full min-h-[calc(100vh-184px)]">
-      <div className="flex flex-col h-full overflow-y-auto">
+    <main className="flex w-full min-h-[calc(100vh-184px)] h-full">
+      <div className="flex flex-col min-h-full overflow-x-auto">
         <div className="w-full p-3 border-b-1 h-fit">
           <Select
             label="Feature"
@@ -49,7 +49,7 @@ const ProjectKanbanBoardPage: FC<Props> = ({ params }) => {
             ))}
           </Select>
         </div>
-        <KanbanBoard featureId={featureId} openTaskDetails={openTaskDetails} />
+        <KanbanBoard featureId={featureId} openTaskDetails={openTaskDetails} project={params.project} />
       </div>
 
       {(defaultStatus || selectedTask) && (

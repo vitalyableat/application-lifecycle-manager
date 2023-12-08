@@ -4,14 +4,18 @@ import { CloseIcon } from '@nextui-org/shared-icons';
 
 import { TASK_STATUS } from '@/constants/task-status';
 import { ITask } from '@/models/task';
+import { ProjectWithEmployees } from '@/services/project/types';
 import useTaskStore from '@/services/task';
+
+import { TaskCard } from '../task-card';
 
 type Props = {
   featureId: string;
   openTaskDetails: (defaultStatus?: TASK_STATUS, task?: ITask) => void;
+  project: ProjectWithEmployees;
 };
 
-export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails }) => {
+export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails, project }) => {
   const tasks = useTaskStore((state) => state.tasks);
   const filteredTasks = useMemo(
     () =>
@@ -30,10 +34,13 @@ export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails }) => {
   );
 
   return (
-    <div className="flex w-full h-fit max-w-full overflow-auto">
-      {Object.entries(filteredTasks).map(([status, tasksByStatus]) => (
-        <div key={status} className="h-full w-1/6 min-w-[240px] border-1 relative">
-          <div className="font-bold text-medium py-3 px-2 text-center border-b-1 sticky top-0 bg-white">
+    <div className="flex flex-col h-full w-full overflow-y-auto">
+      <div className="flex sticky top-0">
+        {Object.keys(filteredTasks).map((status) => (
+          <div
+            key={status}
+            className="h-12 w-1/6 min-w-[240px] border-1 font-bold text-medium py-3 px-2
+                     text-center border-b-1 bg-white relative">
             {status}
             {featureId && (
               <p
@@ -44,19 +51,17 @@ export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails }) => {
               </p>
             )}
           </div>
-          <div className="flex flex-col h-fit gap-3 p-3 ">
+        ))}
+      </div>
+      <div className="flex w-full h-fit">
+        {Object.entries(filteredTasks).map(([status, tasksByStatus]) => (
+          <div key={status} className="flex h-full flex-col gap-3 p-3 w-1/6 min-w-[240px] border-1">
             {tasksByStatus.map((task) => (
-              <div
-                key={task.id}
-                className="flex flex-col rounded-md p-3 gap-3 bg-default-100 hover:shadow cursor-pointer"
-                onClick={() => openTaskDetails(undefined, task)}>
-                <p className="font-bold txt-overflow">{task.title}</p>
-                {task.description}
-              </div>
+              <TaskCard key={task.id} task={task} openTaskDetails={openTaskDetails} project={project} />
             ))}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
