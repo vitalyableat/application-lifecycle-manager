@@ -1,4 +1,3 @@
-'use client';
 import { FC } from 'react';
 
 import { TASK_STATUS } from '@/constants/task-status';

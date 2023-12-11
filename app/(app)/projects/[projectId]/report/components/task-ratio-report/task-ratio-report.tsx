@@ -33,7 +33,7 @@ export const TaskRatioReport: FC = () => {
       tasks.reduce(
         (res, t) => ({
           ...res,
-          [t.featureId]: { ...res[t.featureId], [t.status]: res[t.featureId][t.status] + 1 },
+          [t.featureId]: { ...res[t.featureId], [t.status]: res[t.featureId]?.[t.status] + 1 },
           project: { ...res['project'], [t.status]: res['project'][t.status] + 1 },
         }),
         initialReportValue,

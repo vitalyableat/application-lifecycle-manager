@@ -11,6 +11,7 @@ import { IEmployee } from '@/models/employee';
 import useAuthStore from '@/services/auth';
 import useEmployeeStore from '@/services/employee';
 import { EmployeePersonalData } from '@/services/employee/types';
+import { dateToIsoString } from '@/utils/date-to-iso-string';
 import { formatPhone } from '@/utils/format-phone';
 
 import 'yup-phone-lite';
@@ -119,7 +120,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
           isInvalid={!!errors.birthDate}
           variant="bordered"
           className="max-w-xs"
-          max={new Date().toISOString().split('T')[0]}
+          max={dateToIsoString(new Date())}
         />
       </div>
 

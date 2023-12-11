@@ -1,6 +1,7 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
 
+import { LineOverflowChart } from '@/components/charts';
 import { TimeRecordForm } from '@/components/forms';
 import { WithRoleAccess } from '@/components/templates';
 import { ActionButton } from '@/components/ui';
@@ -11,8 +12,6 @@ import useAuthStore from '@/services/auth';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTimeRecordStore from '@/services/time-record';
 import { dateToString } from '@/utils/date-to-string';
-
-import { TimeRecordsLine } from '../time-records-line';
 
 type Props = {
   task: ITask;
@@ -64,7 +63,10 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
         />
       ) : (
         <>
-          <TimeRecordsLine taskTimeRecords={taskTimeRecords} estimation={Number(task.hoursEstimation)} />
+          <LineOverflowChart
+            spentTime={Number(taskTimeRecords.reduce((res, v) => res + Number(v.hoursSpent), 0).toFixed(2))}
+            estimationTime={Number(task.hoursEstimation)}
+          />
           <div className="flex flex-col mt-5">
             {taskTimeRecords.map((timeRecord) => (
               <div key={timeRecord.id} className="flex flex-col border p-2 relative">
