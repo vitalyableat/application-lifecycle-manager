@@ -12,6 +12,7 @@ import useAuthStore from '@/services/auth';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTimeRecordStore from '@/services/time-record';
 import { dateToString } from '@/utils/date-to-string';
+import { getEmployeeFullName } from '@/utils/get-employee-full-name';
 
 type Props = {
   task: ITask;
@@ -34,12 +35,6 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
     () => timeRecords.filter((timeRecord) => timeRecord.taskId === task.id),
     [timeRecords, task],
   );
-
-  const getEmployeeFullName = (employeeId: string) => {
-    const employee = project.employees.find((employee) => employee.id === employeeId);
-
-    return employee?.name + ' ' + employee?.surname;
-  };
 
   return (
     <>
@@ -88,7 +83,7 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
                         ? 'calc(100% - 48px)'
                         : '100%',
                   }}>
-                  <b>{timeRecord.hoursSpent}h</b> {getEmployeeFullName(timeRecord.employeeId)}
+                  <b>{timeRecord.hoursSpent}h</b> {getEmployeeFullName(timeRecord.employeeId, project.employees)}
                 </div>
               </div>
             ))}

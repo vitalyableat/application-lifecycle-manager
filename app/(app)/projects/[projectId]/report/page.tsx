@@ -1,5 +1,5 @@
 'use client';
-import { FC, ReactNode, useState } from 'react';
+import { ChangeEvent, FC, ReactNode, useState } from 'react';
 
 import { Input, Select, SelectItem } from '@nextui-org/react';
 
@@ -27,7 +27,13 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
     [REPORT_TYPE.EMPLOYEE_TIME]: (
       <EmployeeTimeReport startDate={startDate} endDate={endDate} employees={project.employees} />
     ),
-    [REPORT_TYPE.TASK_TIME]: <TaskTimeReport />,
+    [REPORT_TYPE.TASK_TIME]: <TaskTimeReport startDate={startDate} endDate={endDate} employees={project.employees} />,
+  };
+
+  const onReportTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setStartDate(dateToIsoString(new Date(project.startDate)));
+    setEndDate(dateToIsoString(new Date()));
+    setReportType(e.target.value as REPORT_TYPE);
   };
 
   return (
@@ -36,7 +42,7 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
         <Select
           label="Report Type"
           selectedKeys={[reportType]}
-          onChange={(e) => setReportType(e.target.value as REPORT_TYPE)}
+          onChange={onReportTypeChange}
           variant="bordered"
           size="sm"
           className="max-w-xs">
@@ -73,7 +79,7 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
           </>
         )}
       </div>
-      {GRAPHS[reportType]}
+      <div className="overflow-y-auto">{GRAPHS[reportType]}</div>
     </main>
   );
 };
