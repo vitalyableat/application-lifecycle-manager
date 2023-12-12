@@ -12,6 +12,7 @@ import useAuthStore from '@/services/auth';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTimeRecordStore from '@/services/time-record';
 import { CreateTimeRecordData } from '@/services/time-record/types';
+import { dateToIsoString } from '@/utils/date-to-iso-string';
 
 const TimeRecordValidationSchema: ObjectSchema<CreateTimeRecordData> = object({
   taskId: string().required(),
@@ -45,7 +46,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
       projectId: timeRecord?.projectId || project.id,
       employeeId: timeRecord?.employeeId || user?.id || '',
       hoursSpent: timeRecord?.hoursSpent || '',
-      date: timeRecord?.date || new Date().toISOString().split('T')[0],
+      date: timeRecord?.date || dateToIsoString(new Date()),
       time: timeRecord?.time || '',
     },
     validationSchema: TimeRecordValidationSchema,
@@ -103,8 +104,8 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
         errorMessage={errors.date}
         isInvalid={!!errors.date}
         variant="bordered"
-        max={new Date().toISOString().split('T')[0]}
-        min={new Date(project.startDate).toISOString().split('T')[0]}
+        max={dateToIsoString(new Date())}
+        min={dateToIsoString(new Date(project.startDate))}
         disabled={user?.role === EMPLOYEE_ROLE.PROJECT_MANAGER}
       />
       <Input

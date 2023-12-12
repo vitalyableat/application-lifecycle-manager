@@ -71,7 +71,7 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
             );
             const featureTrack = featureTaskTracks.reduce(
               (res, c) => ({
-                start: res.start === -1 || res.start > c.start ? c.start : res.start,
+                start: res.start === -1 || (res.start > c.start && c.start !== -1) ? c.start : res.start,
                 end: res.end === -1 || res.end < c.end ? c.end : res.end,
                 height: 48,
               }),

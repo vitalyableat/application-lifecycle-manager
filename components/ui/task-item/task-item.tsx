@@ -31,7 +31,7 @@ export const TaskItem: FC<Props> = ({ task, defaultStatus, project, closeTaskDet
       <div className="border-b-1 p-6 relative">
         <p className="font-bold h-6 max-w-[calc(100%-88px)] txt-overflow">{task?.title}</p>
         <ActionButton icon="back" onClick={task && isFormOpen ? closeForm : closeTaskDetails} />
-        {!isFormOpen && (
+        {!isFormOpen && task && (
           <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER, EMPLOYEE_ROLE.DEVELOPER]}>
             <ActionButton icon="edit" onClick={openForm} className="right-16" />
           </WithRoleAccess>
