@@ -7,6 +7,7 @@ import { CloseIcon } from '@nextui-org/shared-icons';
 import { WithRoleAccess } from '@/components/templates';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 import { ITask } from '@/models/task';
+import useAuthStore from '@/services/auth';
 import useFeatureStore from '@/services/feature';
 import useTaskStore from '@/services/task';
 import useTimeRecordStore from '@/services/time-record';
@@ -23,6 +24,7 @@ type Props = {
 export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDetails }) => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const [selectedFeatureId, setSelectedFeatureId] = useState('');
+  const user = useAuthStore((state) => state.user);
   const features = useFeatureStore((state) => state.features);
   const tasks = useTaskStore((state) => state.tasks);
   const timeRecords = useTimeRecordStore((state) => state.timeRecords);
@@ -79,7 +81,12 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
             );
 
             return f.id === selectedFeatureId
-              ? [...res, featureTrack, { start: -1, end: -1, height: 36 }, ...featureTaskTracks]
+              ? [
+                  ...res,
+                  featureTrack,
+                  ...(user?.role !== EMPLOYEE_ROLE.RESOURCE_MANAGER ? [{ start: -1, end: -1, height: 36 }] : []),
+                  ...featureTaskTracks,
+                ]
               : [...res, featureTrack];
           },
           [] as { start: number; end: number; height: number }[],
@@ -123,7 +130,7 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
                     key={task.id}
                     className={`${
                       selectedTask?.id === task.id && 'bg-secondary-200'
-                    } hover:bg-secondary-100 p-2 txt-overflow cursor-pointer`}
+                    } hover:bg-secondary-100 py-1.5 px-2 txt-overflow cursor-pointer leading-6`}
                     onClick={() => openTaskDetails(feature.id, task)}>
                     {task.title}
                   </div>

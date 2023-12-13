@@ -1,5 +1,5 @@
 'use client';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { LineOverflowChart } from '@/components/charts';
 import { TimeRecordForm } from '@/components/forms';
@@ -36,6 +36,10 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
     [timeRecords, task],
   );
 
+  useEffect(() => {
+    closeForm();
+  }, [task]);
+
   return (
     <>
       <div className="py-6 relative">
@@ -52,7 +56,7 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
         <TimeRecordForm
           taskId={task.id}
           timeRecord={selectedTimeRecord}
-          featureId={featureId}
+          featureId={featureId || task.featureId}
           project={project}
           closeForm={closeForm}
         />
