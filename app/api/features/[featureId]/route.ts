@@ -52,7 +52,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { featu
       await TimeRecordModel.deleteMany({ featureId: params.featureId });
     }
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }

@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
 
     const data = await TimeRecordModel.findOneAndUpdate({ _id: timeRecord.id }, timeRecord, { new: true });
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }

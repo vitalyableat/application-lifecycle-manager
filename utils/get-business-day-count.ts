@@ -13,14 +13,15 @@ const HOLIDAYS = [
   '2023-12-25',
 ];
 
-export const getBusinessDayCount = (startDate: Date, endDate: Date): number => {
+export const getBusinessDayCount = (startDate: Date, endDate: Date, holidays = HOLIDAYS): number => {
   let count = 0;
   const curDate = new Date(startDate.getTime());
 
   while (curDate <= endDate) {
     const dayOfWeek = curDate.getDay();
+    const isWeekend = dayOfWeek !== 0 && dayOfWeek !== 6;
 
-    if (dayOfWeek !== 0 && dayOfWeek !== 6 && !HOLIDAYS.includes(dateToIsoString(curDate))) {
+    if (!isWeekend && !holidays.includes(dateToIsoString(curDate))) {
       count++;
     }
     curDate.setDate(curDate.getDate() + 1);

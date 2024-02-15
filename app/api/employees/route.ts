@@ -82,7 +82,7 @@ export async function PUT(request: NextRequest) {
     await connectDB();
     const data = await EmployeeModel.findOneAndUpdate({ _id: employee.id }, employee, { new: true });
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
       const [key, value] = Object.entries(error.keyValue)[0];

@@ -50,7 +50,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { taskI
       await TimeRecordModel.deleteMany({ taskId: params.taskId });
     }
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }

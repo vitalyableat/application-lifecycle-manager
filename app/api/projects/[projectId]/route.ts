@@ -70,7 +70,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { proje
       await TimeRecordModel.deleteMany({ projectId: params.projectId });
     }
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }
