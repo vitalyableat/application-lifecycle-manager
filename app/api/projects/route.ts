@@ -100,7 +100,7 @@ export async function PUT(request: NextRequest) {
       await Promise.all(data.employeeIds.map((id) => EmployeeModel.findOneAndUpdate({ _id: id }, { free: false })));
     }
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
       const [key, value] = Object.entries(error.keyValue)[0];

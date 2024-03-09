@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     await connectDB();
     const data = await TaskModel.findOneAndUpdate({ _id: task.id }, task, { new: true });
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }

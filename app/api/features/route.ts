@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     await connectDB();
     const data = await FeatureModel.findOneAndUpdate({ _id: feature.id }, feature, { new: true });
 
-    return NextResponse.json(data, SERVER_STATUS[201]);
+    return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     return NextResponse.json(null, SERVER_STATUS[500]);
   }
