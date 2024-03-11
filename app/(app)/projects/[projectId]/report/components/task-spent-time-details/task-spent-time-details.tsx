@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/react';
 import { ChevronUpIcon } from '@nextui-org/shared-icons';
 
 import { LineChart } from '@/components/charts';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { ITimeRecord } from '@/models/time-record';
 import { dateToString } from '@/utils/date-to-string';
@@ -30,6 +31,7 @@ export const TaskSpentTimeDetails: FC<Props> = ({
   isDetailsOpen,
   toggleDetails,
 }) => {
+  const d = getDictionary(getClientLocale());
   const timeRecordsByDate = useMemo(
     () =>
       timeRecords.reduce(
@@ -63,7 +65,10 @@ export const TaskSpentTimeDetails: FC<Props> = ({
               ))}
             </div>
           ))}
-          <p className="font-bold text-md">Total hours spent: {spentHours}</p>
+          <p className="font-bold text-md">
+            {d.pages.projects.totalHoursSpent}
+            {spentHours}
+          </p>
         </div>
       )}
     </div>

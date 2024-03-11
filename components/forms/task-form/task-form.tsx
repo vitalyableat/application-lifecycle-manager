@@ -8,20 +8,11 @@ import { object, ObjectSchema, string } from 'yup';
 
 import { NumberInput } from '@/components/ui';
 import { TASK_STATUS } from '@/constants/task-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTaskStore from '@/services/task';
 import { CreateTaskData } from '@/services/task/types';
-
-const TaskValidationSchema: ObjectSchema<CreateTaskData> = object({
-  featureId: string().required(),
-  projectId: string().required(),
-  employeeId: string(),
-  title: string().required(),
-  description: string(),
-  status: string().oneOf(Object.values(TASK_STATUS)).required(),
-  hoursEstimation: string(),
-});
 
 type Props = {
   task?: ITask;
@@ -42,11 +33,21 @@ export const TaskForm: FC<Props> = ({
   setSelectedTask,
   closeTaskDetails,
 }) => {
+  const d = getDictionary(getClientLocale());
   const [addTask, updateTask, deleteTask] = useTaskStore((state) => [
     state.addTask,
     state.updateTask,
     state.deleteTask,
   ]);
+  const TaskValidationSchema: ObjectSchema<CreateTaskData> = object({
+    featureId: string().required(d.forms.required),
+    projectId: string().required(d.forms.required),
+    employeeId: string(),
+    title: string().required(d.forms.required),
+    description: string(),
+    status: string().oneOf(Object.values(TASK_STATUS)).required(d.forms.required),
+    hoursEstimation: string(),
+  });
   const { handleSubmit, values, errors, handleChange, dirty, resetForm } = useFormik<CreateTaskData>({
     initialValues: {
       featureId: task?.featureId || featureId,
@@ -97,9 +98,9 @@ export const TaskForm: FC<Props> = ({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
-      <p className="text-xl font-bold text-center">Task Details</p>
+      <p className="text-xl font-bold text-center">{d.pages.projects.taskDetails}</p>
       <Input
-        label="Title"
+        label={d.labels.title}
         name="title"
         onChange={handleChange}
         value={values.title}
@@ -108,7 +109,7 @@ export const TaskForm: FC<Props> = ({
         variant="bordered"
       />
       <Textarea
-        label="Description"
+        label={d.labels.description}
         name="description"
         onChange={handleChange}
         value={values.description}
@@ -118,7 +119,7 @@ export const TaskForm: FC<Props> = ({
         maxRows={3}
       />
       <NumberInput
-        label="Estimation (hours)"
+        label={d.labels.estimation}
         name="hoursEstimation"
         onChange={handleChange}
         value={values.hoursEstimation}
@@ -126,7 +127,7 @@ export const TaskForm: FC<Props> = ({
         isInvalid={!!errors.hoursEstimation}
       />
       <Select
-        label="Status"
+        label={d.labels.status}
         name="status"
         selectedKeys={[values.status]}
         onChange={handleChange}
@@ -139,7 +140,7 @@ export const TaskForm: FC<Props> = ({
         ))}
       </Select>
       <Select
-        label="Employee"
+        label={d.labels.employee}
         name="employeeId"
         defaultSelectedKeys={values?.employeeId && [values.employeeId]}
         onChange={handleChange}
@@ -159,11 +160,11 @@ export const TaskForm: FC<Props> = ({
 
       <div className={`flex w-full ${task ? 'justify-end' : 'justify-center'} gap-5`}>
         <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-          Save
+          {d.save}
         </Button>
         {task && (
           <Button type="button" color="danger" className="font-bold" onClick={onTaskDelete}>
-            Delete
+            {d.delete}
           </Button>
         )}
       </div>

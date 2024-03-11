@@ -1,6 +1,7 @@
 import { FC, useEffect, useMemo } from 'react';
 
 import { Loader, Search } from '@/components/ui';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { IProject } from '@/models/project';
 import useEmployeeStore from '@/services/employee';
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export const EmployeeSelect: FC<Props> = ({ employeeIds, setEmployeeIds, project }) => {
+  const d = getDictionary(getClientLocale());
   const [employees, getEmployees, isLoading] = useEmployeeStore((state) => [
     state.employees,
     state.getEmployees,
@@ -43,10 +45,10 @@ export const EmployeeSelect: FC<Props> = ({ employeeIds, setEmployeeIds, project
   return (
     <div className="flex flex-col w-full gap-5">
       {isLoading && <Loader />}
-      <p className="w-full text-center text-md font-bold">Chose a team</p>
+      <p className="w-full text-center text-md font-bold">{d.pages.projects.chooseTeam}</p>
       <div className="flex w-full justify-center gap-5 min-w-max">
         <div className="flex flex-col gap-5 items-start w-1/2 max-w-xs">
-          <p className="flex items-end justify-center w-full font-bold h-10">Selected employees</p>
+          <p className="flex items-end justify-center w-full font-bold h-10">{d.pages.projects.selectedEmployees}</p>
           <EmployeeList employees={selectedEmployees} onIconClick={removeEmployee} />
         </div>
         <div className="flex flex-col gap-5 items-start w-1/2 max-w-xs">

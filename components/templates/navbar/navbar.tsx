@@ -6,11 +6,13 @@ import { ChevronRightIcon } from '@nextui-org/shared-icons';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { APP_ROUTE } from '@/constants/app-route';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import useAuthStore from '@/services/auth';
 
 import { NAVBAR_LISTBOX } from './navbar.constants';
 
 export const Navbar: FC<PropsWithChildren> = ({ children }) => {
+  const d = getDictionary(getClientLocale());
   const logout = useAuthStore((state) => state.logout);
   const [navbarOpen, setNavbarOpen] = useState(true);
   const router = useRouter();
@@ -48,12 +50,11 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
               <ListboxItem
                 key={key}
                 startContent={<Icon className="min-w-[24px]" />}
-                color={title === 'Logout' ? 'danger' : pathname.startsWith(key) ? 'secondary' : 'default'}
+                color={title === 'logout' ? 'danger' : pathname.startsWith(key) ? 'secondary' : 'default'}
                 className={`h-14 px-4 rounded-none data-[hover=true]:text-inherit 
                 ${pathname.startsWith(key) && 'bg-secondary-200'} 
-                ${title === 'Settings' && 'border-b-1'}
               `}>
-                {navbarOpen && title}
+                {navbarOpen && d.templates.navbar[title]}
               </ListboxItem>
             ))}
           </Listbox>

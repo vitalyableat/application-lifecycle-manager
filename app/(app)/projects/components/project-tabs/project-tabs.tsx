@@ -7,12 +7,14 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Loader } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import useProjectStore from '@/services/project';
 
 import { PROJECT_LISTBOX } from './project-tabs.constants';
 import { AccordionItemClasses } from './project-tabs.styles';
 
 export const ProjectTabs: FC = () => {
+  const d = getDictionary(getClientLocale());
   const router = useRouter();
   const pathname = usePathname();
   const { projectId } = useParams<{ projectId?: string }>();
@@ -56,7 +58,7 @@ export const ProjectTabs: FC = () => {
                   key={key}
                   startContent={Icon}
                   className={`${pathname === key.replace(':projectId', id) && 'bg-secondary-200'}`}>
-                  {title}
+                  {d.templates.projectTabs[title]}
                 </ListboxItem>
               ))}
             </Listbox>

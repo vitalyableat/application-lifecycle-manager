@@ -6,6 +6,7 @@ import { CloseIcon } from '@nextui-org/shared-icons';
 
 import { WithRoleAccess } from '@/components/templates';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import useAuthStore from '@/services/auth';
 import useFeatureStore from '@/services/feature';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDetails }) => {
+  const d = getDictionary(getClientLocale());
   const timelineRef = useRef<HTMLDivElement>(null);
   const [selectedFeatureId, setSelectedFeatureId] = useState('');
   const user = useAuthStore((state) => state.user);
@@ -109,7 +111,7 @@ export const Timeline: FC<Props> = ({ projectStartDate, selectedTask, openTaskDe
   return (
     <div className="flex w-full overflow-y-auto">
       <div className="h-fit min-h-full w-1/4 min-w-[240px] border-r-1">
-        <p className="font-bold text-medium py-3 px-2 border-b-1">Features</p>
+        <p className="font-bold text-medium py-3 px-2 border-b-1">{d.pages.projects.features}</p>
         <Accordion itemClasses={AccordionItemClasses} showDivider={false} className="px-0 flex flex-col w-full">
           {data.map((feature) => (
             <AccordionItem

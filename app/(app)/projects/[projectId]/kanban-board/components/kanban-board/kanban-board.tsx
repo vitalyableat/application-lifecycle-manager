@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import { CloseIcon } from '@nextui-org/shared-icons';
 
 import { TASK_STATUS } from '@/constants/task-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTaskStore from '@/services/task';
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails, project }) => {
+  const d = getDictionary(getClientLocale());
   const tasks = useTaskStore((state) => state.tasks);
   const filteredTasks = useMemo(
     () =>
@@ -36,12 +38,12 @@ export const KanbanBoard: FC<Props> = ({ featureId, openTaskDetails, project }) 
   return (
     <div className="flex flex-col h-full w-full overflow-y-auto">
       <div className="flex sticky top-0">
-        {Object.keys(filteredTasks).map((status) => (
+        {(Object.keys(filteredTasks) as TASK_STATUS[]).map((status) => (
           <div
             key={status}
             className="h-12 w-1/6 min-w-[240px] border-1 font-bold text-medium py-3 px-2
                      text-center border-b-1 bg-white relative">
-            {status}
+            {d.pages.projects[status]}
             {featureId && (
               <p
                 className="absolute top-2 right-2 bg-secondary-200 p-1

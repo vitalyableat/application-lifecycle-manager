@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 
 import { TaskRatioCircleChart, TaskRatioCircleChartData } from '@/components/charts';
 import { TASK_STATUS } from '@/constants/task-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import useFeatureStore from '@/services/feature';
 import useTaskStore from '@/services/task';
 
@@ -16,13 +17,14 @@ const initialTaskAmount: { [key in TASK_STATUS]: number } = {
 };
 
 export const TaskRatioReport: FC = () => {
+  const d = getDictionary(getClientLocale());
   const features = useFeatureStore((state) => state.features);
   const tasks = useTaskStore((state) => state.tasks);
   const initialReportValue: { [key: string]: TaskRatioCircleChartData } = useMemo(
     () =>
       features.reduce((res, f) => ({ ...res, [f.id]: { feature: f.title, ...initialTaskAmount } }), {
         project: {
-          feature: 'All Project Tasks',
+          feature: d.pages.projects.allProjectTasks,
           ...initialTaskAmount,
         },
       }),

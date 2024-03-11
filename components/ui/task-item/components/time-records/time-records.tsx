@@ -6,6 +6,7 @@ import { TimeRecordForm } from '@/components/forms';
 import { WithRoleAccess } from '@/components/templates';
 import { ActionButton } from '@/components/ui';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import { ITimeRecord } from '@/models/time-record';
 import useAuthStore from '@/services/auth';
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
+  const d = getDictionary(getClientLocale());
   const user = useAuthStore((state) => state.user);
   const timeRecords = useTimeRecordStore((state) => state.timeRecords);
   const [isFormOpen, setFormOpen] = useState(false);
@@ -43,7 +45,7 @@ export const TimeRecords: FC<Props> = ({ task, project, featureId }) => {
   return (
     <>
       <div className="py-6 relative">
-        <p className="font-bold text-center">Time Records</p>
+        <p className="font-bold text-center">{d.pages.projects.timeRecords}</p>
         <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.DEVELOPER]}>
           {isFormOpen || selectedTimeRecord ? (
             <ActionButton icon="back" onClick={closeForm} className="-right-2" />

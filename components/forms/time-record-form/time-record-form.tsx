@@ -7,22 +7,13 @@ import { object, ObjectSchema, string } from 'yup';
 
 import { NumberInput } from '@/components/ui';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITimeRecord } from '@/models/time-record';
 import useAuthStore from '@/services/auth';
 import { ProjectWithEmployees } from '@/services/project/types';
 import useTimeRecordStore from '@/services/time-record';
 import { CreateTimeRecordData } from '@/services/time-record/types';
 import { dateToIsoString } from '@/utils/date-to-iso-string';
-
-const TimeRecordValidationSchema: ObjectSchema<CreateTimeRecordData> = object({
-  taskId: string().required(),
-  featureId: string().required(),
-  projectId: string().required(),
-  employeeId: string().required(),
-  hoursSpent: string().required(),
-  date: string().required(),
-  time: string().required(),
-});
 
 type Props = {
   taskId: string;
@@ -33,12 +24,22 @@ type Props = {
 };
 
 export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeRecord, closeForm }) => {
+  const d = getDictionary(getClientLocale());
   const user = useAuthStore((state) => state.user);
   const [addTimeRecord, updateTimeRecord, deleteTimeRecord] = useTimeRecordStore((state) => [
     state.addTimeRecord,
     state.updateTimeRecord,
     state.deleteTimeRecord,
   ]);
+  const TimeRecordValidationSchema: ObjectSchema<CreateTimeRecordData> = object({
+    taskId: string().required(d.forms.required),
+    featureId: string().required(d.forms.required),
+    projectId: string().required(d.forms.required),
+    employeeId: string().required(d.forms.required),
+    hoursSpent: string().required(d.forms.required),
+    date: string().required(d.forms.required),
+    time: string().required(d.forms.required),
+  });
   const { handleSubmit, values, errors, handleChange, dirty, resetForm } = useFormik<CreateTimeRecordData>({
     initialValues: {
       taskId: timeRecord?.taskId || taskId,
@@ -86,7 +87,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
       <NumberInput
-        label="Spent Time (hours)"
+        label={d.labels.spentTime}
         name="hoursSpent"
         onChange={handleChange}
         value={values.hoursSpent}
@@ -97,7 +98,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
       <Input
         classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
         type="date"
-        label="Date"
+        label={d.labels.date}
         name="date"
         onChange={handleChange}
         value={values.date}
@@ -111,7 +112,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
       <Input
         classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
         type="time"
-        label="Start Time"
+        label={d.labels.time}
         name="time"
         onChange={handleChange}
         value={values.time}
@@ -123,11 +124,11 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
 
       <div className={`flex w-full ${timeRecord ? 'justify-end' : 'justify-center'} gap-5`}>
         <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-          Save
+          {d.save}
         </Button>
         {timeRecord && (
           <Button type="button" color="danger" className="font-bold" onClick={onTimeRecordDelete}>
-            Delete
+            {d.delete}
           </Button>
         )}
       </div>

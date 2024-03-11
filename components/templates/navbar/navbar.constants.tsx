@@ -5,15 +5,17 @@ import { IconSvgProps } from '@nextui-org/shared-icons/dist/types';
 import { EmployeesIcon, LogoutIcon, ProfileIcon, ProjectsIcon } from '@/components/icons';
 import { APP_ROUTE } from '@/constants/app-route';
 
-interface IProjectListboxItem {
+type NavbarItemTitle = 'projects' | 'employees' | 'profile' | 'logout';
+
+interface INavbarListboxItem {
   key: APP_ROUTE;
-  title: string;
+  title: NavbarItemTitle;
   Icon: FC<IconSvgProps>;
 }
 
-export const NAVBAR_LISTBOX: IProjectListboxItem[] = [
-  { key: APP_ROUTE.PROJECTS, title: 'Projects', Icon: ProjectsIcon },
-  { key: APP_ROUTE.EMPLOYEES, title: 'Employees', Icon: EmployeesIcon },
-  { key: APP_ROUTE.PROFILE, title: 'Profile', Icon: ProfileIcon },
-  { key: APP_ROUTE.LOGIN, title: 'Logout', Icon: LogoutIcon },
+export const NAVBAR_LISTBOX: INavbarListboxItem[] = [
+  { key: APP_ROUTE.PROJECTS, title: 'projects', Icon: ProjectsIcon },
+  { key: APP_ROUTE.EMPLOYEES, title: 'employees', Icon: EmployeesIcon },
+  { key: APP_ROUTE.PROFILE, title: 'profile', Icon: ProfileIcon },
+  { key: APP_ROUTE.LOGIN, title: 'logout', Icon: LogoutIcon },
 ];

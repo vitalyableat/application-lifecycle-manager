@@ -8,10 +8,12 @@ import { FeatureForm } from '@/components/forms';
 import { WithRoleAccess } from '@/components/templates';
 import { ActionButton, Loader } from '@/components/ui';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IFeature } from '@/models/feature';
 import useFeatureStore from '@/services/feature';
 
 const ProjectFeaturesPage = () => {
+  const d = getDictionary(getClientLocale());
   const { projectId } = useParams<{ projectId: string }>();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<IFeature | undefined>();
@@ -42,7 +44,7 @@ const ProjectFeaturesPage = () => {
       {isLoading && <Loader />}
       <div className="w-full flex flex-col">
         <div className={`${!isFormOpen && 'relative'} py-6 border-b-1`}>
-          <p className="text-xl font-bold text-center">Features</p>
+          <p className="text-xl font-bold text-center">{d.pages.projects.features}</p>
           <WithRoleAccess rolesWithAccess={[EMPLOYEE_ROLE.PROJECT_MANAGER]}>
             {isFormOpen ? (
               <ActionButton icon="back" onClick={closeForm} />

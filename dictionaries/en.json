@@ -1,0 +1,137 @@
+{
+  "alm": "ALM",
+  "save": "Save",
+  "delete": "Delete",
+  "labels": {
+    "email": "Email",
+    "password": "Password",
+    "language": "Language",
+    "search": "Type to search...",
+    "name": "Name",
+    "surname": "Surname",
+    "phone": "Phone",
+    "birthday": "Birthday",
+    "position": "Position",
+    "level": "Level",
+    "status": "Status",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "description": "Description",
+    "title": "Title",
+    "spentTime": "Spent Time (hours)",
+    "date": "Date",
+    "time": "Start Time",
+    "estimation": "Estimation (hours)",
+    "employee": "Employee",
+    "feature": "Feature",
+    "reportType": "Report Type",
+    "startDate": "Start Date",
+    "endDate": "End Date"
+  },
+  "templates": {
+    "appBar": {
+      "en": "English",
+      "ru": "Russian"
+    },
+    "navbar": {
+      "projects": "Projects",
+      "employees": "Employees",
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+    "projectTabs": {
+      "details": "Details",
+      "features": "Features",
+      "timeline": "Timeline",
+      "kanban": "Kanban Board",
+      "report": "Report"
+    }
+  },
+  "pages": {
+    "login": {
+      "toolNumberOne": "Application Lifecycle Management Tool №1",
+      "welcome": "Welcome to ALM",
+      "login": "Login"
+    },
+    "home": {
+      "goodNight": "Good night",
+      "goodMorning": "Good morning",
+      "goodAfternoon": "Good afternoon",
+      "goodEvening": "Good evening",
+      "notFound": "Page not found :("
+    },
+    "employees": {
+      "notFound": "Employee not found :(",
+      "selectEmployee": "Select an employee to see its details...",
+      "personalInformation": "Personal Information",
+      "workingInformation": "Working Information",
+      "phone": "Phone: ",
+      "email": "Email: ",
+      "birthDate": "Birth Date: ",
+      "position": "Position: ",
+      "level": "Professional Level: ",
+      "hiringDate": "Hiring Date: ",
+      "fired": "Fired",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "profile": {
+      "changePassword": "Change password"
+    },
+    "projects": {
+      "notFound": "Project not found :(",
+      "selectProject": "Select a project to see its details :)",
+      "projectDetails": "Project Details",
+      "Active": "Active",
+      "On Hold": "On Hold",
+      "Completed": "Completed",
+      "Cancelled": "Cancelled",
+      "chooseTeam": "Chose a team",
+      "selectedEmployees": "Selected Employees",
+      "status": "Status: ",
+      "description": "Description: ",
+      "estimation": "Estimation: ",
+      "assignee": "Assignee: ",
+      "projectTeam": "Project Team",
+      "features": "Features",
+      "featureDetails": "Feature Details",
+      "timeRecords": "Time Records",
+      "taskDetails": "Task Details",
+      "To Do": "To Do",
+      "Development": "Development",
+      "Code Review": "Code Review",
+      "Testing": "Testing",
+      "Done": "Done",
+      "taskRatioReport": "Task Ratio Report",
+      "employeeTimeReport": "Employee Time Report",
+      "taskTimeReport": "Task Time Report",
+      "allProjectTasks": "All Project Tasks",
+      "employeeWorkingHours": "Employee Working Hours Report",
+      "timeSpentOnTasks": "Time Spent on Tasks Report",
+      "totalHoursSpent": "Total spent (hours): "
+    }
+  },
+  "forms": {
+    "required": "This field is required",
+    "passwordMinLength": "The minimum password length is 4 characters",
+    "email": "The specified email address is invalid",
+    "phone": "The specified phone number is invalid"
+  },
+  "server": {
+    "400": "Bad request",
+    "401": "Unauthorized",
+    "403": "You have no access to this resource",
+    "404": "Not found",
+    "500": "Something went wrong, please try again later",
+    "wrongEmailOrPassword": "Wrong email or password",
+    "accountInactive": "Your account is no longer active",
+    "employeeWithPhoneExists": "Employee with specified phone already exists",
+    "employeeWithEmailExists": "Employee with specified email already exists",
+    "newPasswordCannotMatch": "New password cannot match the previous one",
+    "invalidPassword": "Invalid Password",
+    "projectWithNameExists": "Project with specified name already exists"
+  },
+  "toasts": {
+    "passwordUpdated": "Password was successfully updated!"
+  }
+}

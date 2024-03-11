@@ -7,15 +7,10 @@ import { useFormik } from 'formik';
 import { useParams } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IFeature } from '@/models/feature';
 import useFeatureStore from '@/services/feature';
 import { CreateFeatureData } from '@/services/feature/types';
-
-const FeatureValidationSchema: ObjectSchema<CreateFeatureData> = object({
-  title: string().required(),
-  description: string(),
-  projectId: string().required(),
-});
 
 type Props = {
   feature?: IFeature;
@@ -23,12 +18,18 @@ type Props = {
 };
 
 export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
+  const d = getDictionary(getClientLocale());
   const { projectId } = useParams<{ projectId: string }>();
   const [addFeature, updateFeature, deleteFeature] = useFeatureStore((state) => [
     state.addFeature,
     state.updateFeature,
     state.deleteFeature,
   ]);
+  const FeatureValidationSchema: ObjectSchema<CreateFeatureData> = object({
+    title: string().required(d.forms.required),
+    description: string(),
+    projectId: string().required(d.forms.required),
+  });
   const { handleSubmit, values, errors, handleChange, dirty, resetForm } = useFormik<CreateFeatureData>({
     initialValues: {
       title: feature?.title || '',
@@ -60,10 +61,10 @@ export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
-      <p className="text-xl font-bold">Feature Details</p>
+      <p className="text-xl font-bold">{d.pages.projects.featureDetails}</p>
       <div className="flex flex-col w-full items-center gap-5">
         <Input
-          label="Title"
+          label={d.labels.title}
           name="title"
           onChange={handleChange}
           value={values.title}
@@ -73,7 +74,7 @@ export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
           className="max-w-xs"
         />
         <Textarea
-          label="Description"
+          label={d.labels.description}
           name="description"
           onChange={handleChange}
           value={values.description}
@@ -86,11 +87,11 @@ export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
       </div>
       <div className={`flex w-full ${feature ? 'justify-end' : 'justify-center'} gap-5`}>
         <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-          Save
+          {d.save}
         </Button>
         {feature && (
           <Button type="button" color="danger" className="font-bold" onClick={onFeatureDelete}>
-            Delete
+            {d.delete}
           </Button>
         )}
       </div>

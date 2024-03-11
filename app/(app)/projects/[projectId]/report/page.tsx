@@ -3,15 +3,16 @@ import { ChangeEvent, FC, ReactNode, useState } from 'react';
 
 import { Input, Select, SelectItem } from '@nextui-org/react';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ProjectWithEmployees } from '@/services/project/types';
 import { dateToIsoString } from '@/utils/date-to-iso-string';
 
 import { EmployeeTimeReport, TaskRatioReport, TaskTimeReport } from './components';
 
 enum REPORT_TYPE {
-  TASK_RATIO = 'Task Ratio Report',
-  EMPLOYEE_TIME = 'Employee Time Report',
-  TASK_TIME = 'Task Time Report',
+  TASK_RATIO = 'taskRatioReport',
+  EMPLOYEE_TIME = 'employeeTimeReport',
+  TASK_TIME = 'taskTimeReport',
 }
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
+  const d = getDictionary(getClientLocale());
   const [reportType, setReportType] = useState<REPORT_TYPE>(REPORT_TYPE.TASK_RATIO);
   const [startDate, setStartDate] = useState(dateToIsoString(new Date(project.startDate)));
   const [endDate, setEndDate] = useState(dateToIsoString(new Date()));
@@ -47,8 +49,8 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
           size="sm"
           className="max-w-xs">
           {Object.values(REPORT_TYPE).map((type) => (
-            <SelectItem key={type} value={type} color="secondary" textValue={type}>
-              {type}
+            <SelectItem key={type} value={type} color="secondary" textValue={d.pages.projects[type]}>
+              {d.pages.projects[type]}
             </SelectItem>
           ))}
         </Select>
@@ -57,7 +59,7 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
             <Input
               classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
               type="date"
-              label="Start Date"
+              label={d.labels.startDate}
               onChange={(e) => setStartDate(e.target.value)}
               value={startDate}
               variant="bordered"
@@ -68,7 +70,7 @@ const ProjectReportPage: FC<Props> = ({ params: { project } }) => {
             <Input
               classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
               type="date"
-              label="End Date"
+              label={d.labels.endDate}
               onChange={(e) => setEndDate(e.target.value)}
               value={endDate}
               variant="bordered"
