@@ -1,9 +1,12 @@
 'use client';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import useAuthStore from '@/services/auth';
 
-const GREETINGS = ['Good night', 'Good morning', 'Good afternoon', 'Good evening'];
+type Greeting = 'goodNight' | 'goodMorning' | 'goodAfternoon' | 'goodEvening';
+const GREETINGS: Greeting[] = ['goodNight', 'goodMorning', 'goodAfternoon', 'goodEvening'];
 
 const HomePage = () => {
+  const d = getDictionary(getClientLocale());
   const user = useAuthStore((state) => state.user);
   const hours = new Date().getHours();
   const greeting = GREETINGS[+(hours / 6).toString()[0]];
@@ -11,7 +14,7 @@ const HomePage = () => {
   return (
     user && (
       <main className="font-bold text-3xl h-full w-full flex items-center justify-center">
-        {greeting}, {user?.name} {user?.surname}!
+        {d.pages.home[greeting]}, {user?.name} {user?.surname}!
       </main>
     )
   );

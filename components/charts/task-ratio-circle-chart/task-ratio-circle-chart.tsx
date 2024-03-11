@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { TASK_STATUS } from '@/constants/task-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 
 const PALETTE: { [key in TASK_STATUS]: string } = {
   [TASK_STATUS.TO_DO]: '#E4E4E7',
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export const TaskRatioCircleChart: FC<Props> = ({ data: { feature, ...taskAmountByStatus }, isProject }) => {
+  const d = getDictionary(getClientLocale());
   const taskTotal = Object.values(taskAmountByStatus).reduce((res, amount) => res + amount, 0);
   const { gradient } = taskTotal
     ? Object.entries(taskAmountByStatus).reduce(
@@ -53,14 +55,14 @@ export const TaskRatioCircleChart: FC<Props> = ({ data: { feature, ...taskAmount
             style={{ width: 96 * k, height: 96 * k }}></div>
         </div>
         <div className="flex flex-col my-auto">
-          {Object.entries(taskAmountByStatus).map(([status, amount]) => (
+          {(Object.entries(taskAmountByStatus) as [TASK_STATUS, number][]).map(([status, amount]) => (
             <div key={status} className="flex gap-3">
               <div
                 className="h-5 w-10 border-1 border-default-300"
                 style={{ backgroundColor: PALETTE[status as TASK_STATUS] }}
               />
               <span>
-                <b>{status}</b> - {amount}
+                <b>{d.pages.projects[status]}</b> - {amount}
               </span>
             </div>
           ))}

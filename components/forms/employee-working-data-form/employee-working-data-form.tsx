@@ -9,23 +9,24 @@ import { object, ObjectSchema, string } from 'yup';
 
 import { APP_ROUTE } from '@/constants/app-route';
 import { EMPLOYEE_LEVEL } from '@/constants/employee-level';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import useEmployeeStore from '@/services/employee';
 import { EmployeeWorkingData } from '@/services/employee/types';
-
-const EmployeeWorkingDataValidationSchema: ObjectSchema<EmployeeWorkingData> = object({
-  position: string().required(),
-  level: string().oneOf(Object.values(EMPLOYEE_LEVEL)).required(),
-  active: string().required(),
-});
 
 type Props = {
   employee: IEmployee;
 };
 
 export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
+  const d = getDictionary(getClientLocale());
   const router = useRouter();
   const [updateEmployee] = useEmployeeStore((state) => [state.updateEmployee]);
+  const EmployeeWorkingDataValidationSchema: ObjectSchema<EmployeeWorkingData> = object({
+    position: string().required(d.forms.required),
+    level: string().oneOf(Object.values(EMPLOYEE_LEVEL)).required(d.forms.required),
+    active: string().required(d.forms.required),
+  });
   const { handleSubmit, values, errors, handleChange, dirty } = useFormik<EmployeeWorkingData>({
     initialValues: {
       position: employee?.position || '',
@@ -48,10 +49,10 @@ export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
 
   return (
     <form onSubmit={handleSubmit} className="relative flex flex-col w-full items-center justify-center gap-5">
-      <p className="text-xl font-bold">Working Information</p>
+      <p className="text-xl font-bold">{d.pages.employees.workingInformation}</p>
       <div className="form-fields">
         <Input
-          label="Position"
+          label={d.labels.position}
           name="position"
           onChange={handleChange}
           value={values.position}
@@ -60,7 +61,7 @@ export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
           className="max-w-xs"
         />
         <Select
-          label="Level"
+          label={d.labels.level}
           name="level"
           defaultSelectedKeys={[values.level]}
           onChange={handleChange}
@@ -75,7 +76,7 @@ export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
           ))}
         </Select>
         <Select
-          label="Status"
+          label={d.labels.status}
           name="active"
           defaultSelectedKeys={[String(values.active)]}
           onChange={handleChange}
@@ -84,16 +85,16 @@ export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
           variant="bordered"
           className="max-w-xs">
           <SelectItem key="true" value="true" color="secondary">
-            Active
+            {d.pages.employees.active}
           </SelectItem>
           <SelectItem key="false" value="false" color="secondary">
-            Inactive
+            {d.pages.employees.inactive}
           </SelectItem>
         </Select>
       </div>
 
       <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-        Save
+        {d.save}
       </Button>
     </form>
   );

@@ -3,20 +3,20 @@ export enum APP_ROUTE {
 
   LOGIN = '/login',
 
-  PROFILE = '/profile', // user
-  PROFILE_EDIT = '/profile/edit', // user
+  PROFILE = '/profile',
+  PROFILE_EDIT = '/profile/edit',
 
   EMPLOYEES = '/employees',
   EMPLOYEE_DETAILS = '/employees/:employeeId',
-  EMPLOYEE_DETAILS_EDIT = '/employees/:employeeId/edit', // RM
-  EMPLOYEE_CREATE = '/employees/create', // RM
+  EMPLOYEE_DETAILS_EDIT = '/employees/:employeeId/edit',
+  EMPLOYEE_CREATE = '/employees/create',
 
   PROJECTS = '/projects',
-  PROJECT_CREATE = '/projects/create', // PM
+  PROJECT_CREATE = '/projects/create',
   PROJECT_DETAILS = '/projects/:projectId/details',
-  PROJECT_DETAILS_EDIT = '/projects/:projectId/details/edit', // PM
-  PROJECT_FEATURES = '/projects/:projectId/features', // CRUD - PM
-  PROJECT_TIMELINE = '/projects/:projectId/timeline', // CRUD - PM, Tasks - Collaborators
+  PROJECT_DETAILS_EDIT = '/projects/:projectId/details/edit',
+  PROJECT_FEATURES = '/projects/:projectId/features',
+  PROJECT_TIMELINE = '/projects/:projectId/timeline',
   PROJECT_KANBAN_BOARD = '/projects/:projectId/kanban-board',
-  PROJECT_REPORT = '/projects/:projectId/report', // Save report as PDF - PM
+  PROJECT_REPORT = '/projects/:projectId/report',
 }

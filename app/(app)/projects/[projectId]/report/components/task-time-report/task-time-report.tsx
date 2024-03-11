@@ -1,6 +1,7 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { ITimeRecord } from '@/models/time-record';
 import useTaskStore from '@/services/task';
@@ -23,6 +24,7 @@ type SpentHoursForTask = {
 };
 
 export const TaskTimeReport: FC<Props> = ({ startDate, endDate, employees }) => {
+  const d = getDictionary(getClientLocale());
   const tasks = useTaskStore((state) => state.tasks);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const timeRecords = useTimeRecordStore((state) => state.timeRecords);
@@ -71,7 +73,7 @@ export const TaskTimeReport: FC<Props> = ({ startDate, endDate, employees }) => 
 
   return (
     <div className="flex flex-col p-6 gap-3">
-      <p className="font-bold text-lg text-center">Employee Working Hours Report</p>
+      <p className="font-bold text-lg text-center">{d.pages.projects.timeSpentOnTasks}</p>
       {sortedBySpentHoursTasks.map(({ taskId, spentHours, taskTitle, timeRecords }) => (
         <TaskSpentTimeDetails
           key={taskId}

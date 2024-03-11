@@ -5,6 +5,7 @@ import { Select, SelectItem } from '@nextui-org/react';
 
 import { TaskItem } from '@/components/ui';
 import { TASK_STATUS } from '@/constants/task-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import useFeatureStore from '@/services/feature';
 import { ProjectWithEmployees } from '@/services/project/types';
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const ProjectKanbanBoardPage: FC<Props> = ({ params }) => {
+  const d = getDictionary(getClientLocale());
   const features = useFeatureStore((state) => state.features);
   const [featureId, setFeatureId] = useState('');
   const [defaultStatus, setDefaultStatus] = useState<TASK_STATUS | undefined>();
@@ -36,7 +38,7 @@ const ProjectKanbanBoardPage: FC<Props> = ({ params }) => {
       <div className="flex flex-col min-h-full overflow-x-auto">
         <div className="w-full p-3 border-b-1 h-fit">
           <Select
-            label="Feature"
+            label={d.labels.feature}
             selectedKeys={featureId ? [featureId] : []}
             onChange={(e) => setFeatureId(e.target.value)}
             variant="bordered"

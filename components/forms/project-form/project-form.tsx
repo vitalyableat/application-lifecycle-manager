@@ -9,30 +9,31 @@ import { array, object, ObjectSchema, string } from 'yup';
 
 import { APP_ROUTE } from '@/constants/app-route';
 import { PROJECT_STATUS } from '@/constants/project-status';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IProject } from '@/models/project';
 import useProjectStore from '@/services/project';
 import { CreateProjectData } from '@/services/project/types';
 
 import { EmployeeSelect } from './components';
 
-const ProjectValidationSchema: ObjectSchema<CreateProjectData> = object({
-  name: string().required(),
-  description: string(),
-  status: string().oneOf(Object.values(PROJECT_STATUS)).required(),
-  employeeIds: array().of(string().required()).required(),
-});
-
 type Props = {
   project?: IProject;
 };
 
 export const ProjectForm: FC<Props> = ({ project }) => {
+  const d = getDictionary(getClientLocale());
   const router = useRouter();
   const [addProject, updateProject, deleteProject] = useProjectStore((state) => [
     state.addProject,
     state.updateProject,
     state.deleteProject,
   ]);
+  const ProjectValidationSchema: ObjectSchema<CreateProjectData> = object({
+    name: string().required(d.forms.required),
+    description: string(),
+    status: string().oneOf(Object.values(PROJECT_STATUS)).required(d.forms.required),
+    employeeIds: array().of(string().required()).required(d.forms.required),
+  });
   const { handleSubmit, values, errors, handleChange, dirty, setFieldValue } = useFormik<CreateProjectData>({
     initialValues: {
       name: project?.name || '',
@@ -68,10 +69,10 @@ export const ProjectForm: FC<Props> = ({ project }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
-      <p className="text-xl font-bold">Project Details</p>
+      <p className="text-xl font-bold">{d.pages.projects.projectDetails}</p>
       <div className="flex flex-col w-full items-center gap-5">
         <Input
-          label="Name"
+          label={d.labels.title}
           name="name"
           onChange={handleChange}
           value={values.name}
@@ -81,7 +82,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
           className="max-w-xs"
         />
         <Textarea
-          label="Description"
+          label={d.labels.description}
           name="description"
           onChange={handleChange}
           value={values.description}
@@ -92,7 +93,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
           maxRows={3}
         />
         <Select
-          label="Status"
+          label={d.labels.status}
           name="status"
           defaultSelectedKeys={[values.status]}
           onChange={handleChange}
@@ -102,7 +103,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
           className="max-w-xs">
           {Object.values(PROJECT_STATUS).map((status) => (
             <SelectItem key={status} value={status} color="secondary">
-              {status}
+              {d.pages.projects[status]}
             </SelectItem>
           ))}
         </Select>
@@ -111,11 +112,11 @@ export const ProjectForm: FC<Props> = ({ project }) => {
 
       <div className={`flex w-full ${project ? 'justify-end' : 'justify-center'} gap-5`}>
         <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-          Save
+          {d.save}
         </Button>
         {project && (
           <Button type="button" color="danger" className="font-bold" onClick={onProjectDelete}>
-            Delete
+            {d.delete}
           </Button>
         )}
       </div>

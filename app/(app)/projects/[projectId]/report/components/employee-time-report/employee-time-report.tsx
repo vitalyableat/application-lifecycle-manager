@@ -1,6 +1,7 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { ITimeRecord } from '@/models/time-record';
 import useTimeRecordStore from '@/services/time-record';
@@ -23,6 +24,7 @@ type SpentHoursByEmployee = {
 };
 
 export const EmployeeTimeReport: FC<Props> = ({ startDate, endDate, employees }) => {
+  const d = getDictionary(getClientLocale());
   const timeRecords = useTimeRecordStore((state) => state.timeRecords);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
   const businessDayCount = getBusinessDayCount(new Date(startDate), new Date(endDate));
@@ -64,7 +66,7 @@ export const EmployeeTimeReport: FC<Props> = ({ startDate, endDate, employees })
 
   return (
     <div className="flex flex-col p-6 gap-3">
-      <p className="font-bold text-lg text-center">Employee Working Hours Report</p>
+      <p className="font-bold text-lg text-center">{d.pages.projects.employeeWorkingHours}</p>
       {Object.entries(spentHoursByEmployees).map(([employeeId, { spentHours, employeeFullName, timeRecords }]) => (
         <EmployeeSpentTimeDetails
           key={employeeId}

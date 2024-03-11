@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
 import { APP_ROUTE } from '@/constants/app-route';
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import useAuthStore from '@/services/auth';
 import useEmployeeStore from '@/services/employee';
@@ -16,23 +17,23 @@ import { formatPhone } from '@/utils/format-phone';
 
 import 'yup-phone-lite';
 
-const EmployeePersonalDataValidationSchema: ObjectSchema<EmployeePersonalData> = object({
-  name: string().required(),
-  surname: string().required(),
-  phone: string().phone('BY').required(),
-  email: string().email().required(),
-  birthDate: string(),
-});
-
 type Props = {
   employee?: IEmployee;
   isProfile?: boolean;
 };
 
 export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => {
+  const d = getDictionary(getClientLocale());
   const router = useRouter();
   const updateUser = useAuthStore((state) => state.updateUser);
   const [addEmployee, updateEmployee] = useEmployeeStore((state) => [state.addEmployee, state.updateEmployee]);
+  const EmployeePersonalDataValidationSchema: ObjectSchema<EmployeePersonalData> = object({
+    name: string().required(d.forms.required),
+    surname: string().required(d.forms.required),
+    phone: string().phone('BY', d.forms.phone).required(d.forms.required),
+    email: string().email(d.forms.email).required(d.forms.required),
+    birthDate: string(),
+  });
   const { handleSubmit, values, errors, handleChange, dirty } = useFormik<EmployeePersonalData>({
     initialValues: {
       name: employee?.name || '',
@@ -67,10 +68,10 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
-      <p className="text-xl font-bold">Personal Information</p>
+      <p className="text-xl font-bold">{d.pages.employees.personalInformation}</p>
       <div className="form-fields">
         <Input
-          label="Name"
+          label={d.labels.name}
           name="name"
           onChange={handleChange}
           value={values.name}
@@ -80,7 +81,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
           className="max-w-xs"
         />
         <Input
-          label="Surname"
+          label={d.labels.surname}
           name="surname"
           onChange={handleChange}
           value={values.surname}
@@ -90,7 +91,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
           className="max-w-xs"
         />
         <Input
-          label="Phone"
+          label={d.labels.phone}
           name="phone"
           onChange={handleChange}
           value={values.phone}
@@ -100,7 +101,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
           className="max-w-xs"
         />
         <Input
-          label="Email"
+          label={d.labels.email}
           name="email"
           onChange={handleChange}
           value={values.email}
@@ -112,7 +113,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
         <Input
           classNames={{ label: 'font-medium pointer-events-auto text-tiny translate-y-[-11px]' }}
           type="date"
-          label="Birthday"
+          label={d.labels.birthday}
           name="birthDate"
           onChange={handleChange}
           value={values.birthDate}
@@ -125,7 +126,7 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
       </div>
 
       <Button disabled={!dirty} color="secondary" className="font-bold disabled:bg-secondary-200" type="submit">
-        Save
+        {d.save}
       </Button>
     </form>
   );

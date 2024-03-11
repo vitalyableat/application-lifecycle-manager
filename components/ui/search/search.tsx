@@ -6,6 +6,8 @@ import { InputProps } from '@nextui-org/react';
 import { SearchIcon } from '@nextui-org/shared-icons';
 import debounce from 'lodash.debounce';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
+
 import { InputClassNames } from './search.styles';
 
 type Props = Omit<InputProps, 'onChange' | 'value'> & {
@@ -14,6 +16,7 @@ type Props = Omit<InputProps, 'onChange' | 'value'> & {
 };
 
 export const Search: FC<Props> = forwardRef<HTMLInputElement, Props>(({ value, onChange, ...props }, ref) => {
+  const d = getDictionary(getClientLocale());
   const [search, setSearch] = useState<string>(value || '');
   const debounceSearch = useCallback(
     debounce((value: string) => {
@@ -38,7 +41,7 @@ export const Search: FC<Props> = forwardRef<HTMLInputElement, Props>(({ value, o
     <Input
       classNames={InputClassNames}
       isClearable
-      placeholder="Type to search..."
+      placeholder={d.labels.search}
       startContent={<SearchIcon />}
       type="search"
       value={search}
