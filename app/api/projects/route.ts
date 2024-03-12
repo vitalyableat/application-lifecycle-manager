@@ -3,16 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { COOKIE_NAME } from '@/constants/cookie-name';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
-import { getServerStatus } from '@/constants/server-status';
-import { getDictionary } from '@/dictionaries';
+import { SERVER_STATUS } from '@/constants/server-status';
 import { EmployeeModel } from '@/models/employee';
 import { IProject, ProjectModel } from '@/models/project';
 import { connectDB } from '@/utils/connect-db';
 import { verifyAccessToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
   if (!accessToken?.value) {
@@ -39,8 +36,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const project = await request.json();
 
@@ -63,11 +58,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data, SERVER_STATUS[201]);
   } catch (error) {
     if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
-      const [key, value] = Object.entries(error.keyValue)[0];
-
       return NextResponse.json(null, {
         status: 409,
-        statusText: d.server.projectWithNameExists,
+        statusText: 'projectWithNameExists',
       });
     }
 
@@ -76,8 +69,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const project = await request.json();
 
@@ -110,11 +101,9 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
-      const [key, value] = Object.entries(error.keyValue)[0];
-
       return NextResponse.json(null, {
         status: 409,
-        statusText: d.server.projectWithNameExists,
+        statusText: 'projectWithNameExists',
       });
     }
 

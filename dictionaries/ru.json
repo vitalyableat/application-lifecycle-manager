@@ -26,7 +26,8 @@
     "feature": "Функциональное требование",
     "reportType": "Отчет",
     "startDate": "Дата начала",
-    "endDate": "Дата окончания"
+    "endDate": "Дата окончания",
+    "lifecycleStep": "Этап жизненного цикла"
   },
   "templates": {
     "appBar": {
@@ -89,6 +90,7 @@
       "chooseTeam": "Соберите команду",
       "selectedEmployees": "Выбранные сотрудники",
       "status": "Статус: ",
+      "lifecycleStep": "Этап жизненного цикла: ",
       "description": "Описание: ",
       "estimation": "Оценка: ",
       "assignee": "Сотрудник: ",
@@ -98,7 +100,7 @@
       "timeRecords": "Записи времени",
       "taskDetails": "Подробности задачи",
       "To Do": "Нужно сделать",
-      "Development": "В разработке",
+      "Development": "Разработка",
       "Code Review": "Проверка кода",
       "Testing": "Тестирование",
       "Done": "Выполнено",
@@ -108,7 +110,12 @@
       "allProjectTasks": "Все задачи проекта",
       "employeeWorkingHours": "Отчет о рабочем времени сотрудников",
       "timeSpentOnTasks": "Отчет о затраченном на выполнение задач времени",
-      "totalHoursSpent": "Всего затрачено (часов): "
+      "totalHoursSpent": "Всего затрачено (часов): ",
+      "Idea": "Идея",
+      "Analysis": "Анализ требований",
+      "Designing": "Проектирование",
+      "Integration": "Внедрение и сопровождение",
+      "Closure": "Закрытие"
     }
   },
   "forms": {
@@ -125,7 +132,7 @@
     "500": "Что-то пошло не так, пожалуйста повторите попытку позже",
     "wrongEmailOrPassword": "Неверная почта или пароль",
     "accountInactive": "Ваш аккаунт неактивен",
-    "employeeWithPhoneExists": "Сотрудгник с указанным номером телефона уже существует",
+    "employeeWithPhoneExists": "Сотрудник с указанным номером телефона уже существует",
     "employeeWithEmailExists": "Сотрудник с указанным адресом почты уже существует",
     "newPasswordCannotMatch": "Новый пароль не может совпадать со старым",
     "invalidPassword": "Старый пароль указан неверно",

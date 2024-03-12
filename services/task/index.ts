@@ -4,6 +4,7 @@ import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
 import { numericCollationSort } from '@/utils/numeric-collation-sort';
 
@@ -19,6 +20,12 @@ interface TaskState {
   deleteTask: (taskId: string) => Promise<void>;
 }
 
+let d: ReturnType<typeof getDictionary> | undefined;
+
+if (typeof window !== 'undefined') {
+  d = getDictionary(getClientLocale());
+}
+
 const useTaskStore = createWithEqualityFn<TaskState>()(
   (set) => ({
     tasks: [],
@@ -30,7 +37,7 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
 
         set({ tasks: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -44,7 +51,7 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
 
         return data;
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
@@ -63,7 +70,7 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
 
         return data;
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
@@ -76,7 +83,7 @@ const useTaskStore = createWithEqualityFn<TaskState>()(
 
         set((state) => ({ tasks: state.tasks.filter((task) => task.id !== taskId) }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }

@@ -59,8 +59,8 @@ export const EmployeePersonalDataForm: FC<Props> = ({ employee, isProfile }) => 
       } catch (e) {
         const errorMessage = (e as Error).message;
 
-        errorMessage.includes('phone') && setFieldValue('phone', '');
-        errorMessage.includes('email') && setFieldValue('email', '');
+        errorMessage.includes('PhoneExists') && setFieldValue('phone', '');
+        errorMessage.includes('EmailExists') && setFieldValue('email', '');
       }
     },
     validateOnChange: false,

@@ -26,7 +26,8 @@
     "feature": "Feature",
     "reportType": "Report Type",
     "startDate": "Start Date",
-    "endDate": "End Date"
+    "endDate": "End Date",
+    "lifecycleStep": "Lifecycle Step"
   },
   "templates": {
     "appBar": {
@@ -89,6 +90,7 @@
       "chooseTeam": "Chose a team",
       "selectedEmployees": "Selected Employees",
       "status": "Status: ",
+      "lifecycleStep": "Lifecycle Step: ",
       "description": "Description: ",
       "estimation": "Estimation: ",
       "assignee": "Assignee: ",
@@ -108,7 +110,12 @@
       "allProjectTasks": "All Project Tasks",
       "employeeWorkingHours": "Employee Working Hours Report",
       "timeSpentOnTasks": "Time Spent on Tasks Report",
-      "totalHoursSpent": "Total spent (hours): "
+      "totalHoursSpent": "Total spent (hours): ",
+      "Idea": "Idea",
+      "Analysis": "Analysis",
+      "Designing": "Designing",
+      "Integration": "Integration",
+      "Closure": "Closure"
     }
   },
   "forms": {

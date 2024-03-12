@@ -14,6 +14,10 @@ const ProjectDetailsPage = async ({ params }: { params: { projectId: string } })
           <b>{d.pages.projects.status}</b>
           {d.pages.projects[project.status]}
         </p>
+        <p className="text-md">
+          <b>{d.pages.projects.lifecycleStep}</b>
+          {d.pages.projects[project.lifecycleStep]}
+        </p>
         {project.description && (
           <p className="text-md whitespace-pre-wrap">
             <b>{d.pages.projects.description}</b>

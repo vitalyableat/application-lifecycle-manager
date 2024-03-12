@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { COOKIE_NAME } from '@/constants/cookie-name';
-import { getServerStatus } from '@/constants/server-status';
-import { getDictionary } from '@/dictionaries';
+import { SERVER_STATUS } from '@/constants/server-status';
 import { EmployeeModel, IEmployee, IEmployeeWithPassword } from '@/models/employee';
 import { ChangePasswordData } from '@/services/auth/types';
 import { connectDB } from '@/utils/connect-db';
@@ -12,8 +11,6 @@ import { hashPassword } from '@/utils/hash-password';
 import { verifyAccessToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest, { params }: { params: { employeeId: string } }) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
   if (!accessToken?.value) {
@@ -37,8 +34,6 @@ export async function GET(request: NextRequest, { params }: { params: { employee
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { employeeId: string } }) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const user = await request.json();
 
@@ -59,11 +54,11 @@ export async function PUT(request: NextRequest, { params }: { params: { employee
     return NextResponse.json(data, SERVER_STATUS[200]);
   } catch (error) {
     if (error instanceof mongoose.mongo.MongoServerError && error.code === 11000) {
-      const [key, value] = Object.entries(error.keyValue)[0];
+      const [key] = Object.entries(error.keyValue)[0];
 
       return NextResponse.json(null, {
         status: 409,
-        statusText: key === 'phone' ? d.server.employeeWithPhoneExists : d.server.employeeWithEmailExists,
+        statusText: key === 'phone' ? 'employeeWithPhoneExists' : 'employeeWithEmailExists',
       });
     }
 
@@ -72,8 +67,6 @@ export async function PUT(request: NextRequest, { params }: { params: { employee
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { employeeId: string } }) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const { oldPassword, newPassword }: ChangePasswordData = await request.json();
 
@@ -89,7 +82,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { employ
     }
 
     if (oldPassword === newPassword) {
-      return NextResponse.json(null, { status: 400, statusText: d.server.newPasswordCannotMatch });
+      return NextResponse.json(null, { status: 400, statusText: 'newPasswordCannotMatch' });
     }
 
     await connectDB();
@@ -102,7 +95,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { employ
     const isPasswordValid = await bcrypt.compare(oldPassword, employee.password);
 
     if (!isPasswordValid) {
-      return NextResponse.json(null, { status: 400, statusText: d.server.invalidPassword });
+      return NextResponse.json(null, { status: 400, statusText: 'invalidPassword' });
     }
 
     await EmployeeModel.findOneAndUpdate({ _id: id }, { password: hashPassword(newPassword) });

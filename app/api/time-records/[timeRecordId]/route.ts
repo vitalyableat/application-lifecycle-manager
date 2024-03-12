@@ -2,15 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { COOKIE_NAME } from '@/constants/cookie-name';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
-import { getServerStatus } from '@/constants/server-status';
-import { getDictionary } from '@/dictionaries';
+import { SERVER_STATUS } from '@/constants/server-status';
 import { ITimeRecord, TimeRecordModel } from '@/models/time-record';
 import { connectDB } from '@/utils/connect-db';
 import { verifyAccessToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest, { params }: { params: { timeRecordId: string } }) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
   if (!accessToken?.value) {
@@ -33,8 +30,6 @@ export async function GET(request: NextRequest, { params }: { params: { timeReco
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { timeRecordId: string } }) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
   if (!accessToken?.value) {
