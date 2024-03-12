@@ -4,6 +4,7 @@ import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { addEmployee, getEmployees, updateEmployee } from '@/services/employee/api';
 import { EmployeePersonalData } from '@/services/employee/types';
@@ -14,6 +15,12 @@ interface EmployeeState {
   getEmployees: () => Promise<void>;
   addEmployee: (employeeCreateData: EmployeePersonalData) => Promise<IEmployee>;
   updateEmployee: (employeeUpdateData: Partial<IEmployee>) => Promise<IEmployee>;
+}
+
+let d: ReturnType<typeof getDictionary> | undefined;
+
+if (typeof window !== 'undefined') {
+  d = getDictionary(getClientLocale());
 }
 
 const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
@@ -27,7 +34,7 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
 
         set({ employees: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -45,7 +52,7 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
 
         return data;
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
@@ -64,7 +71,7 @@ const useEmployeeStore = createWithEqualityFn<EmployeeState>()(
 
         return data;
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });

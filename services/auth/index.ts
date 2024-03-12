@@ -4,6 +4,7 @@ import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IEmployee } from '@/models/employee';
 import { changePassword, login, logout, refreshUser, updateUser } from '@/services/auth/api';
 
@@ -20,6 +21,12 @@ interface AuthState {
   changePassword: (changePasswordData: ChangePasswordData & { id: string }) => Promise<void>;
 }
 
+let d: ReturnType<typeof getDictionary> | undefined;
+
+if (typeof window !== 'undefined') {
+  d = getDictionary(getClientLocale());
+}
+
 const useAuthStore = createWithEqualityFn<AuthState>()(
   (set) => ({
     user: null,
@@ -32,7 +39,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
 
         set({ user: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
@@ -58,7 +65,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
         await logout();
         set({ user: null, isLoading: false });
       } catch (e) {
-        toast.error((e as AxiosResponse).request?.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -70,7 +77,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
 
         set({ user: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });
@@ -81,7 +88,7 @@ const useAuthStore = createWithEqualityFn<AuthState>()(
       try {
         await changePassword(changePasswordData);
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
         throw new Error((e as AxiosResponse).request.statusText);
       } finally {
         set({ isLoading: false });

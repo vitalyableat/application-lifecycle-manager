@@ -4,6 +4,7 @@ import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITimeRecord } from '@/models/time-record';
 
 import { addTimeRecord, deleteTimeRecord, getProjectTimeRecords, updateTimeRecord } from './api';
@@ -18,6 +19,12 @@ interface TimeRecordState {
   deleteTimeRecord: (timeRecordId: string) => Promise<void>;
 }
 
+let d: ReturnType<typeof getDictionary> | undefined;
+
+if (typeof window !== 'undefined') {
+  d = getDictionary(getClientLocale());
+}
+
 const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
   (set) => ({
     timeRecords: [],
@@ -29,7 +36,7 @@ const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
 
         set({ timeRecords: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -45,7 +52,7 @@ const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
           ),
         }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -61,7 +68,7 @@ const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
             .sort((a, b) => (a.date === b.date ? (a.time > b.time ? -1 : 1) : a.date > b.date ? -1 : 1)),
         }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -73,7 +80,7 @@ const useTimeRecordStore = createWithEqualityFn<TimeRecordState>()(
 
         set((state) => ({ timeRecords: state.timeRecords.filter((timeRecord) => timeRecord.id !== timeRecordId) }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }

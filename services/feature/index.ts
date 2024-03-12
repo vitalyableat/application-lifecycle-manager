@@ -4,6 +4,7 @@ import { type AxiosResponse } from 'axios';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IFeature } from '@/models/feature';
 import { numericCollationSort } from '@/utils/numeric-collation-sort';
 
@@ -19,6 +20,12 @@ interface FeatureState {
   deleteFeature: (featureId: string) => Promise<void>;
 }
 
+let d: ReturnType<typeof getDictionary> | undefined;
+
+if (typeof window !== 'undefined') {
+  d = getDictionary(getClientLocale());
+}
+
 const useFeatureStore = createWithEqualityFn<FeatureState>()(
   (set) => ({
     features: [],
@@ -30,7 +37,7 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
 
         set({ features: data });
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -44,7 +51,7 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
           features: [...state.features, data].sort((a, b) => numericCollationSort(a.title, b.title)),
         }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -60,7 +67,7 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
             .sort((a, b) => numericCollationSort(a.title, b.title)),
         }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }
@@ -72,7 +79,7 @@ const useFeatureStore = createWithEqualityFn<FeatureState>()(
 
         set((state) => ({ features: state.features.filter((feature) => feature.id !== featureId) }));
       } catch (e) {
-        toast.error((e as AxiosResponse).request.statusText);
+        toast.error(d?.server[(e as AxiosResponse).request.statusText as keyof typeof d.server] || '');
       } finally {
         set({ isLoading: false });
       }

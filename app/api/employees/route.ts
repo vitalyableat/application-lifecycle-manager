@@ -3,16 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { COOKIE_NAME } from '@/constants/cookie-name';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
-import { getServerStatus } from '@/constants/server-status';
-import { getDictionary } from '@/dictionaries';
+import { SERVER_STATUS } from '@/constants/server-status';
 import { EmployeeModel, IEmployee } from '@/models/employee';
 import { connectDB } from '@/utils/connect-db';
 import { hashPassword } from '@/utils/hash-password';
 import { verifyAccessToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
 
   if (!accessToken?.value) {
@@ -35,8 +32,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const employee = await request.json();
 
@@ -61,7 +56,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(null, {
         status: 409,
-        statusText: key === 'phone' ? d.server.employeeWithPhoneExists : d.server.employeeWithEmailExists,
+        statusText: key === 'phone' ? 'employeeWithPhoneExists' : 'employeeWithEmailExists',
       });
     }
 
@@ -70,8 +65,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const d = getDictionary(request.cookies.get(COOKIE_NAME.LOCALE)?.value);
-  const SERVER_STATUS = getServerStatus(d);
   const accessToken = request.cookies.get(COOKIE_NAME.ACCESS_TOKEN);
   const employee = await request.json();
 
@@ -96,7 +89,7 @@ export async function PUT(request: NextRequest) {
 
       return NextResponse.json(null, {
         status: 409,
-        statusText: key === 'phone' ? d.server.employeeWithPhoneExists : d.server.employeeWithEmailExists,
+        statusText: key === 'phone' ? 'employeeWithPhoneExists' : 'employeeWithEmailExists',
       });
     }
 

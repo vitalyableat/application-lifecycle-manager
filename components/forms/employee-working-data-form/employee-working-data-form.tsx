@@ -41,7 +41,7 @@ export const EmployeeWorkingDataForm: FC<Props> = ({ employee }) => {
         router.push(APP_ROUTE.EMPLOYEE_DETAILS.replace(':employeeId', id));
         router.refresh();
       } catch (e) {
-        toast.error((e as Error).message);
+        console.log(e);
       }
     },
     validateOnChange: false,
