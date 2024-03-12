@@ -1,10 +1,8 @@
-import { FC } from 'react';
-
 import { NotFound } from '@/components/ui';
-import { getClientLocale, getDictionary } from '@/dictionaries';
+import { getDictionary, getServerLocale } from '@/dictionaries';
 
-const NotFoundPage: FC = () => {
-  const d = getDictionary(getClientLocale());
+const NotFoundPage = async () => {
+  const d = getDictionary(await getServerLocale());
 
   return <NotFound>{d.pages.projects.notFound}</NotFound>;
 };

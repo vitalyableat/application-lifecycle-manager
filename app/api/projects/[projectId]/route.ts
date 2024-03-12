@@ -37,6 +37,7 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
         id: project._id,
         name: project.name,
         status: project.status,
+        lifecycleStep: project.lifecycleStep,
         description: project.description,
         startDate: project.startDate,
         employeeIds,

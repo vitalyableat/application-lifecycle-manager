@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { array, object, ObjectSchema, string } from 'yup';
 
 import { APP_ROUTE } from '@/constants/app-route';
+import { PROJECT_LIFECYCLE_STEP } from '@/constants/project-lifecycle-step';
 import { PROJECT_STATUS } from '@/constants/project-status';
 import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IProject } from '@/models/project';
@@ -32,6 +33,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
     name: string().required(d.forms.required),
     description: string(),
     status: string().oneOf(Object.values(PROJECT_STATUS)).required(d.forms.required),
+    lifecycleStep: string().oneOf(Object.values(PROJECT_LIFECYCLE_STEP)).required(d.forms.required),
     employeeIds: array().of(string().required()).required(d.forms.required),
   });
   const { handleSubmit, values, errors, handleChange, dirty, setFieldValue } = useFormik<CreateProjectData>({
@@ -39,6 +41,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
       name: project?.name || '',
       description: project?.description || '',
       status: project?.status || PROJECT_STATUS.ACTIVE,
+      lifecycleStep: project?.lifecycleStep || PROJECT_LIFECYCLE_STEP.IDEA,
       employeeIds: project?.employeeIds || [],
     },
     validationSchema: ProjectValidationSchema,
@@ -104,6 +107,21 @@ export const ProjectForm: FC<Props> = ({ project }) => {
           {Object.values(PROJECT_STATUS).map((status) => (
             <SelectItem key={status} value={status} color="secondary">
               {d.pages.projects[status]}
+            </SelectItem>
+          ))}
+        </Select>
+        <Select
+          label={d.labels.lifecycleStep}
+          name="lifecycleStep"
+          defaultSelectedKeys={[values.lifecycleStep]}
+          onChange={handleChange}
+          value={values.lifecycleStep}
+          errorMessage={errors.lifecycleStep}
+          variant="bordered"
+          className="max-w-xs">
+          {Object.values(PROJECT_LIFECYCLE_STEP).map((step) => (
+            <SelectItem key={step} value={step} color="secondary">
+              {d.pages.projects[step]}
             </SelectItem>
           ))}
         </Select>

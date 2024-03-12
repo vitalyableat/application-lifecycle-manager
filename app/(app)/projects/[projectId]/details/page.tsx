@@ -6,6 +6,8 @@ const ProjectDetailsPage = async ({ params }: { params: { projectId: string } })
   const d = getDictionary(await getServerLocale());
   const project = await getProjectByIdHandler(params.projectId);
 
+  console.log(project);
+
   return (
     <main className="flex flex-col gap-5 p-6 overflow-y-auto">
       <p className="text-xl font-bold text-center">{d.pages.projects.projectDetails}</p>
@@ -13,6 +15,10 @@ const ProjectDetailsPage = async ({ params }: { params: { projectId: string } })
         <p className="text-md">
           <b>{d.pages.projects.status}</b>
           {d.pages.projects[project.status]}
+        </p>
+        <p className="text-md">
+          <b>{d.pages.projects.lifecycleStep}</b>
+          {d.pages.projects[project.lifecycleStep]}
         </p>
         {project.description && (
           <p className="text-md whitespace-pre-wrap">
