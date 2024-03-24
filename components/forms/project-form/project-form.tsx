@@ -1,12 +1,12 @@
 'use client';
 import { FC } from 'react';
 
-import { Textarea } from '@nextui-org/input';
-import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, Textarea, useDisclosure } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { array, object, ObjectSchema, string } from 'yup';
 
+import { ConfirmationModal } from '@/components/ui';
 import { APP_ROUTE } from '@/constants/app-route';
 import { PROJECT_LIFECYCLE_STEP } from '@/constants/project-lifecycle-step';
 import { PROJECT_STATUS } from '@/constants/project-status';
@@ -24,10 +24,12 @@ type Props = {
 export const ProjectForm: FC<Props> = ({ project }) => {
   const d = getDictionary(getClientLocale());
   const router = useRouter();
-  const [addProject, updateProject, deleteProject] = useProjectStore((state) => [
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [addProject, updateProject, deleteProject, isLoading] = useProjectStore((state) => [
     state.addProject,
     state.updateProject,
     state.deleteProject,
+    state.isLoading,
   ]);
   const ProjectValidationSchema: ObjectSchema<CreateProjectData> = object({
     name: string().required(d.forms.required),
@@ -63,6 +65,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
   const onProjectDelete = async () => {
     if (project) {
       await deleteProject(project.id);
+      onClose();
 
       router.push(APP_ROUTE.PROJECTS);
       router.refresh();
@@ -72,6 +75,13 @@ export const ProjectForm: FC<Props> = ({ project }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
+      <ConfirmationModal
+        isLoading={isLoading}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={onProjectDelete}
+        bodyText={d.modals.confirmation.deleteProject}
+      />
       <p className="text-xl font-bold">{d.pages.projects.projectDetails}</p>
       <div className="flex flex-col w-full items-center gap-5">
         <Input
@@ -133,7 +143,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
           {d.save}
         </Button>
         {project && (
-          <Button type="button" color="danger" className="font-bold" onClick={onProjectDelete}>
+          <Button type="button" color="danger" className="font-bold" onClick={onOpen}>
             {d.delete}
           </Button>
         )}

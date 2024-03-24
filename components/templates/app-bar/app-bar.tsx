@@ -12,8 +12,10 @@ export const AppBar = async () => {
   return (
     <Navbar maxWidth="full" className="shadow">
       <NavbarBrand className="max-w-[159px]">
-        <LogoIcon />
-        <p className="font-bold text-xl">{d.alm}</p>
+        <a className="cursor-pointer flex items-center" href="/">
+          <LogoIcon />
+          <p className="font-bold text-xl">{d.alm}</p>
+        </a>
       </NavbarBrand>
       <Divider orientation="vertical" className="h-10 bg-default-200" />
       <NavbarContent as="div" justify="end">

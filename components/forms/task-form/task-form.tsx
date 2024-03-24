@@ -2,11 +2,11 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 
 import { Textarea } from '@nextui-org/input';
-import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Input, Select, SelectItem, useDisclosure } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { object, ObjectSchema, string } from 'yup';
 
-import { NumberInput } from '@/components/ui';
+import { ConfirmationModal, NumberInput } from '@/components/ui';
 import { TASK_STATUS } from '@/constants/task-status';
 import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITask } from '@/models/task';
@@ -34,10 +34,12 @@ export const TaskForm: FC<Props> = ({
   closeTaskDetails,
 }) => {
   const d = getDictionary(getClientLocale());
-  const [addTask, updateTask, deleteTask] = useTaskStore((state) => [
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [addTask, updateTask, deleteTask, isLoading] = useTaskStore((state) => [
     state.addTask,
     state.updateTask,
     state.deleteTask,
+    state.isLoading,
   ]);
   const TaskValidationSchema: ObjectSchema<CreateTaskData> = object({
     featureId: string().required(d.forms.required),
@@ -91,6 +93,7 @@ export const TaskForm: FC<Props> = ({
   const onTaskDelete = async () => {
     if (task) {
       await deleteTask(task.id);
+      onClose();
       setSelectedTask(undefined);
       closeTaskDetails();
     }
@@ -98,6 +101,13 @@ export const TaskForm: FC<Props> = ({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
+      <ConfirmationModal
+        isLoading={isLoading}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={onTaskDelete}
+        bodyText={d.modals.confirmation.deleteTask}
+      />
       <p className="text-xl font-bold text-center">{d.pages.projects.taskDetails}</p>
       <Input
         label={d.labels.title}
@@ -163,7 +173,7 @@ export const TaskForm: FC<Props> = ({
           {d.save}
         </Button>
         {task && (
-          <Button type="button" color="danger" className="font-bold" onClick={onTaskDelete}>
+          <Button type="button" color="danger" className="font-bold" onClick={onOpen}>
             {d.delete}
           </Button>
         )}
