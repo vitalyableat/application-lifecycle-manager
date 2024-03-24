@@ -111,11 +111,11 @@
       "employeeWorkingHours": "Отчет о рабочем времени сотрудников",
       "timeSpentOnTasks": "Отчет о затраченном на выполнение задач времени",
       "totalHoursSpent": "Всего затрачено (часов): ",
-      "Idea": "Идея",
-      "Analysis": "Анализ требований",
-      "Designing": "Проектирование",
-      "Integration": "Внедрение и сопровождение",
-      "Closure": "Закрытие"
+      "Technical Specification": "Техническое задание",
+      "Preliminary Design": "Эскизный проект",
+      "Technical Project": "Технический проект",
+      "Working Draft": "Рабочий проект",
+      "Integration": "Внедрение"
     }
   },
   "forms": {

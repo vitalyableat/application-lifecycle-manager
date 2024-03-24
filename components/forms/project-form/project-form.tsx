@@ -43,7 +43,7 @@ export const ProjectForm: FC<Props> = ({ project }) => {
       name: project?.name || '',
       description: project?.description || '',
       status: project?.status || PROJECT_STATUS.ACTIVE,
-      lifecycleStep: project?.lifecycleStep || PROJECT_LIFECYCLE_STEP.IDEA,
+      lifecycleStep: project?.lifecycleStep || PROJECT_LIFECYCLE_STEP.TECHNICAL_SPECIFICATION,
       employeeIds: project?.employeeIds || [],
     },
     validationSchema: ProjectValidationSchema,

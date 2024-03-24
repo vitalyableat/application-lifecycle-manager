@@ -111,11 +111,11 @@
       "employeeWorkingHours": "Employee Working Hours Report",
       "timeSpentOnTasks": "Time Spent on Tasks Report",
       "totalHoursSpent": "Total spent (hours): ",
-      "Idea": "Idea",
-      "Analysis": "Analysis",
-      "Designing": "Designing",
-      "Integration": "Integration",
-      "Closure": "Closure"
+      "Technical Specification": "Technical Specification",
+      "Preliminary Design": "Preliminary Design",
+      "Technical Project": "Technical Project",
+      "Working Draft": "Working Draft",
+      "Integration": "Integration"
     }
   },
   "forms": {
