@@ -1,9 +1,7 @@
 export enum PROJECT_LIFECYCLE_STEP {
-  IDEA = 'Idea',
-  ANALYSIS = 'Analysis',
-  DESIGNING = 'Designing',
-  DEVELOPMENT = 'Development',
-  TESTING = 'Testing',
+  TECHNICAL_SPECIFICATION = 'Technical Specification',
+  PRELIMINARY_DESIGN = 'Preliminary Design',
+  TECHNICAL_PROJECT = 'Technical Project',
+  WORKING_DRAFT = 'Working Draft',
   INTEGRATION = 'Integration',
-  CLOSURE = 'Closure',
 }
