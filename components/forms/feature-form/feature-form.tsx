@@ -2,11 +2,12 @@
 import { FC, useEffect } from 'react';
 
 import { Textarea } from '@nextui-org/input';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, useDisclosure } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useParams } from 'next/navigation';
 import { object, ObjectSchema, string } from 'yup';
 
+import { ConfirmationModal } from '@/components/ui';
 import { getClientLocale, getDictionary } from '@/dictionaries';
 import { IFeature } from '@/models/feature';
 import useFeatureStore from '@/services/feature';
@@ -20,10 +21,12 @@ type Props = {
 export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
   const d = getDictionary(getClientLocale());
   const { projectId } = useParams<{ projectId: string }>();
-  const [addFeature, updateFeature, deleteFeature] = useFeatureStore((state) => [
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [addFeature, updateFeature, deleteFeature, isLoading] = useFeatureStore((state) => [
     state.addFeature,
     state.updateFeature,
     state.deleteFeature,
+    state.isLoading,
   ]);
   const FeatureValidationSchema: ObjectSchema<CreateFeatureData> = object({
     title: string().required(d.forms.required),
@@ -55,12 +58,20 @@ export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
   const onFeatureDelete = async () => {
     if (feature) {
       await deleteFeature(feature.id);
+      onClose();
       closeForm();
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
+      <ConfirmationModal
+        isLoading={isLoading}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={onFeatureDelete}
+        bodyText={d.modals.confirmation.deleteFeature}
+      />
       <p className="text-xl font-bold">{d.pages.projects.featureDetails}</p>
       <div className="flex flex-col w-full items-center gap-5">
         <Input
@@ -90,7 +101,7 @@ export const FeatureForm: FC<Props> = ({ feature, closeForm }) => {
           {d.save}
         </Button>
         {feature && (
-          <Button type="button" color="danger" className="font-bold" onClick={onFeatureDelete}>
+          <Button type="button" color="danger" className="font-bold" onClick={onOpen}>
             {d.delete}
           </Button>
         )}

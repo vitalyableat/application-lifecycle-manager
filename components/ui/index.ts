@@ -1,5 +1,6 @@
 export * from './action-button';
 export * from './avatar-preview';
+export * from './confirmation-modal';
 export * from './employee-item';
 export * from './employee-preview';
 export * from './loader';

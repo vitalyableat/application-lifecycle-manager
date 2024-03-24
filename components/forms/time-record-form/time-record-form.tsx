@@ -1,11 +1,11 @@
 'use client';
 import { FC, useEffect } from 'react';
 
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, useDisclosure } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { object, ObjectSchema, string } from 'yup';
 
-import { NumberInput } from '@/components/ui';
+import { ConfirmationModal, NumberInput } from '@/components/ui';
 import { EMPLOYEE_ROLE } from '@/constants/employee-role';
 import { getClientLocale, getDictionary } from '@/dictionaries';
 import { ITimeRecord } from '@/models/time-record';
@@ -26,10 +26,12 @@ type Props = {
 export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeRecord, closeForm }) => {
   const d = getDictionary(getClientLocale());
   const user = useAuthStore((state) => state.user);
-  const [addTimeRecord, updateTimeRecord, deleteTimeRecord] = useTimeRecordStore((state) => [
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [addTimeRecord, updateTimeRecord, deleteTimeRecord, isLoading] = useTimeRecordStore((state) => [
     state.addTimeRecord,
     state.updateTimeRecord,
     state.deleteTimeRecord,
+    state.isLoading,
   ]);
   const TimeRecordValidationSchema: ObjectSchema<CreateTimeRecordData> = object({
     taskId: string().required(d.forms.required),
@@ -80,12 +82,20 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
   const onTimeRecordDelete = async () => {
     if (timeRecord) {
       await deleteTimeRecord(timeRecord.id);
+      onClose();
       closeForm();
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full items-center justify-center gap-5">
+      <ConfirmationModal
+        isLoading={isLoading}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={onTimeRecordDelete}
+        bodyText={d.modals.confirmation.deleteTimeRecord}
+      />
       <NumberInput
         label={d.labels.spentTime}
         name="hoursSpent"
@@ -127,7 +137,7 @@ export const TimeRecordForm: FC<Props> = ({ taskId, featureId, project, timeReco
           {d.save}
         </Button>
         {timeRecord && (
-          <Button type="button" color="danger" className="font-bold" onClick={onTimeRecordDelete}>
+          <Button type="button" color="danger" className="font-bold" onClick={onOpen}>
             {d.delete}
           </Button>
         )}

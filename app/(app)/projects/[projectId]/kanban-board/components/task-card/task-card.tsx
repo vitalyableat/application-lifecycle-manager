@@ -33,7 +33,7 @@ export const TaskCard: FC<Props> = ({ task, openTaskDetails, project }) => {
       <p className="txt-overflow-3">{task.description}</p>
       <div className="flex justify-between w-full items-end">
         <p>
-          {spentHours} / {task.hoursEstimation}{' '}
+          {spentHours} / {Number(task.hoursEstimation)}{' '}
         </p>
         <Avatar src={assignee?.avatar} size="sm" />
       </div>
